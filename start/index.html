@@ -902,7 +902,7 @@ function renderBook() {
     } else if (spread.layout === 'three-cards') {
       // Three-card layout (December)
       const div = document.createElement('div');
-      div.className = `spread ${i === 0 ? 'active' : ''}`;
+      div.className = `spread three-cards ${i === 0 ? 'active' : ''}`;
       div.id = `spread-${i}`;
       div.innerHTML = `
         ${spread.cards.map((card, ci) => renderPage(card, `card-${i}-${ci}`)).join('')}
