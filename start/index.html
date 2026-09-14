@@ -568,7 +568,12 @@ footer .heart {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
-  grid-column: 1 / -1;
+}
+
+.photo-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .grid-item {
@@ -772,15 +777,28 @@ const spreads = [
   },
   {
     month: "November",
-    type: "photogrid",
-    description: "Nothing insane happened in november but we still have all these memories to account for us this month.",
-    photos: [
-      { accent1: "#C4944A", accent2: "#C97B63", trivia: { question: "What is my favorite color?", options: ["Brown", "Blue", "Green", "Red"], correct: 0 } },
-      { accent1: "#C97B63", accent2: "#D4A853", trivia: { question: "What state do I live in?", options: ["Texas", "Ohio", "Tennessee", "Florida"], correct: 0 } },
-      { accent1: "#8B7355", accent2: "#C4944A", trivia: { question: "What do I study?", options: ["Business Analytics & AI", "Computer Science", "Finance", "Engineering"], correct: 0 } },
-      { accent1: "#D4A853", accent2: "#C97B63", trivia: { question: "What is my go-to coffee order?", options: ["Iced caramel macchiato", "Black coffee", "Vanilla latte", "Matcha"], correct: 0 } },
-      { accent1: "#7BA69C", accent2: "#8B7355", trivia: { question: "What internship did I have in 2025?", options: ["Fidelity Investments", "Goldman Sachs", "JP Morgan", "Deloitte"], correct: 0 } }
-    ]
+    left: {
+      title: "November 27 — Our First Thanksgiving 🦃",
+      description: "Our first ever Thanksgiving together. No turkey this year but we were just thankful for each other.",
+      accent1: "#C4944A",
+      accent2: "#C97B63",
+      date: "November 27, 2025",
+      tag: "First Thanksgiving",
+      trivia: {
+        question: "What occasion was it where we were thankful for each other?",
+        options: ["First Christmas 🎄", "First Thanksgiving 🦃", "First Halloween 🎃", "First New Year 🎆"],
+        correct: 1
+      }
+    },
+    right: {
+      type: "photogrid",
+      description: "Nothing insane happened in november but we still have all these memories to account for us this month.",
+      photos: [
+        { accent1: "#C4944A", accent2: "#C97B63", trivia: { question: "What is my favorite color?", options: ["Brown", "Blue", "Green", "Red"], correct: 0 } },
+        { accent1: "#C97B63", accent2: "#D4A853", trivia: { question: "What state do I live in?", options: ["Texas", "Ohio", "Tennessee", "Florida"], correct: 0 } },
+        { accent1: "#8B7355", accent2: "#C4944A", trivia: { question: "What do I study?", options: ["Business Analytics & AI", "Computer Science", "Finance", "Engineering"], correct: 0 } }
+      ]
+    }
   },
   {
     month: "December",
@@ -842,7 +860,7 @@ function renderBook() {
   container.innerHTML = '';
   spreads.forEach((spread, i) => {
     if (spread.type === 'photogrid') {
-      // Photo grid layout
+      // Full-width photo grid layout
       const div = document.createElement('div');
       div.className = `spread ${i === 0 ? 'active' : ''}`;
       div.id = `spread-${i}`;
@@ -852,6 +870,23 @@ function renderBook() {
         </div>
         <div class="photo-grid">
           ${spread.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
+        </div>
+      `;
+      container.appendChild(div);
+    } else if (spread.right && spread.right.type === 'photogrid') {
+      // Spread with left page + right photo grid
+      const div = document.createElement('div');
+      div.className = `spread ${i === 0 ? 'active' : ''}`;
+      div.id = `spread-${i}`;
+      div.innerHTML = `
+        ${renderPage(spread.left, `left-${i}`)}
+        <div class="photo-grid-container">
+          <div class="photo-grid-desc" style="text-align:center; padding:10px; font-size:0.9rem; color:var(--brown-medium); font-weight:600;">
+            ${spread.right.description}
+          </div>
+          <div class="photo-grid">
+            ${spread.right.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
+          </div>
         </div>
       `;
       container.appendChild(div);
