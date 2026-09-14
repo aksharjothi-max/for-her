@@ -982,7 +982,7 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
           pageEl.classList.remove('locked');
           pageEl.classList.add('unlocked');
           const info = pageEl.querySelector('.page-info');
-          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p>';
+          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p><button class="reset-btn" onclick="resetPage(\'' + id + '\', event)" style="display:block; margin-top:10px; padding:6px 16px; background:transparent; border:2px solid var(--brown); border-radius:20px; font-family:\'Fredoka\'; font-size:0.85rem; font-weight:600; color:var(--brown); cursor:pointer;">Reset</button>';
         }
         updateProgress();
         fireConfetti();
@@ -1176,8 +1176,25 @@ function unlockPage(id) {
       <p>${page.description}</p>
       <span class="page-date">${page.date}</span>
       ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
+      <button class="reset-btn" onclick="resetPage('${id}', event)" style="display:block; margin-top:10px; padding:6px 16px; background:transparent; border:2px solid var(--brown); border-radius:20px; font-family:'Fredoka'; font-size:0.85rem; font-weight:600; color:var(--brown); cursor:pointer;">Reset</button>
     `;
     pageEl.appendChild(infoDiv);
+  }
+  updateProgress();
+  updateDots();
+}
+
+function resetPage(id, event) {
+  if (event) event.stopPropagation();
+  unlocked.delete(id);
+  localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
+  const pageEl = document.getElementById(`page-${id}`);
+  if (pageEl) {
+    pageEl.classList.remove('unlocked');
+    pageEl.classList.add('locked');
+    // Remove old page-info
+    const oldInfo = pageEl.querySelector('.page-info');
+    if (oldInfo) oldInfo.remove();
   }
   updateProgress();
   updateDots();
