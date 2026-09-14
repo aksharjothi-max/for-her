@@ -1050,7 +1050,16 @@ function openTrivia(id) {
 
 function tryAgain() {
   document.getElementById('triviaTryAgain').style.display = 'none';
-  openTrivia(currentTriviaId);
+  document.getElementById('triviaBackdrop').classList.remove('show');
+  // Check if it's a grid item or regular spread
+  if (currentTriviaId && currentTriviaId.startsWith('grid-')) {
+    const parts = currentTriviaId.split('-');
+    const spreadIdx = parseInt(parts[1]);
+    const photoIdx = parseInt(parts[2]);
+    openGridTrivia(currentTriviaId, spreadIdx, photoIdx);
+  } else {
+    openTrivia(currentTriviaId);
+  }
 }
 
 function checkAnswer(btn, selected, correct) {
