@@ -705,11 +705,11 @@ const spreads = [
   {
     month: "October",
     left: {
-      title: "October 2 — Vaishnavi's First 'I Love You' ❤️",
+      title: "Vaishnavi's First 'I Love You' ❤️",
       description: "The day she said 'I love you' for the first time. The words I'd been waiting to hear.",
       accent1: "#C97B63",
       accent2: "#C4944A",
-      date: "October 2, 2025",
+      date: "",
       tag: "Milestone",
       trivia: {
         question: "What date did Vaishnavi first say 'I love you'?",
@@ -718,15 +718,15 @@ const spreads = [
       }
     },
     right: {
-      title: "October 17 💋",
-      description: "The first day we ever met in person. And the day we had our actual first kiss. Not on FaceTime — for real.",
+      title: "October 17 — First Kiss 💋",
+      description: "The day we had our actual first kiss. Not on FaceTime — for real.",
       accent1: "#D4A853",
       accent2: "#C97B63",
       date: "October 17, 2025",
       tag: "Firsts",
       trivia: {
         question: "What happened on October 17?",
-        options: ["First date", "First meeting + actual first kiss", "First trip together", "First time meeting family"],
+        options: ["First date", "Our actual first kiss 💋", "First trip together", "First time meeting family"],
         correct: 1
       }
     }
@@ -795,10 +795,24 @@ let currentPage = 0;
 const unlocked = new Set();
 
 function init() {
+  // Restore from localStorage
+  const savedUnlocked = localStorage.getItem('start-unlocked');
+  if (savedUnlocked) {
+    JSON.parse(savedUnlocked).forEach(id => unlocked.add(id));
+  }
+  const savedPage = localStorage.getItem('start-currentPage');
+  if (savedPage) {
+    currentPage = parseInt(savedPage);
+  }
   renderBook();
   renderDots();
   updateProgress();
   updateNav();
+  // Show saved page
+  document.querySelectorAll('.spread').forEach(s => s.classList.remove('active'));
+  const savedSpread = document.getElementById(`spread-${currentPage}`);
+  if (savedSpread) savedSpread.classList.add('active');
+  updateDots();
 }
 
 function renderBook() {
@@ -865,6 +879,7 @@ function navigate(dir) {
     document.getElementById(`spread-${currentPage}`).classList.add('active');
     updateDots();
     updateNav();
+    localStorage.setItem('start-currentPage', currentPage);
   }
 }
 
@@ -874,6 +889,7 @@ function goToPage(i) {
   document.getElementById(`spread-${currentPage}`).classList.add('active');
   updateDots();
   updateNav();
+  localStorage.setItem('start-currentPage', currentPage);
 }
 
 function updateDots() {
@@ -960,6 +976,7 @@ function checkAnswer(btn, selected, correct) {
 
 function unlockPage(id) {
   unlocked.add(id);
+  localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
   const pageEl = document.getElementById(`page-${id}`);
   if (pageEl) {
     pageEl.classList.remove('locked');
