@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Her 💕</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Caveat:wght@500;700&display=swap');
+
+:root {
+  --coral: #FF6B6B;
+  --coral-light: #FF8E8E;
+  --yellow: #FFD93D;
+  --yellow-light: #FFE566;
+  --teal: #4ECDC4;
+  --teal-dark: #3BA99F;
+  --purple: #A78BFA;
+  --pink: #F472B6;
+  --cream: #FFF8F0;
+  --ink: #2D3436;
+  --white: #ffffff;
+  --dark: #1a1a2e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: linear-gradient(135deg, var(--dark) 0%, #16213e 30%, #0f3460 60%, #1a1a2e 100%);
+  min-height: 100vh;
+  color: var(--cream);
+  overflow-x: hidden;
+}
+
+/* Animated background orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.orb-1 {
+  width: 400px; height: 400px;
+  background: var(--coral);
+  top: -100px; left: -100px;
+  animation: orbFloat1 12s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 350px; height: 350px;
+  background: var(--purple);
+  bottom: -100px; right: -100px;
+  animation: orbFloat2 15s ease-in-out infinite;
+}
+
+.orb-3 {
+  width: 250px; height: 250px;
+  background: var(--teal);
+  top: 40%; left: 60%;
+  animation: orbFloat3 10s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(80px, 60px) scale(1.1); }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-60px, -80px) scale(1.15); }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -50px) scale(0.9); }
+}
+
+/* Shooting stars */
+.shooting-star {
+  position: fixed;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  opacity: 0;
+  z-index: 1;
+  animation: shoot 5s ease-in-out infinite;
+}
+
+.shooting-star:nth-child(4) { top: 20%; animation-delay: 0s; }
+.shooting-star:nth-child(5) { top: 35%; animation-delay: 2s; }
+.shooting-star:nth-child(6) { top: 12%; animation-delay: 4s; }
+
+@keyframes shoot {
+  0% { transform: translateX(-100px) translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  30% { opacity: 0; }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(150px); opacity: 0; }
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 80px 20px 40px;
+  position: relative;
+  z-index: 10;
+}
+
+header h1 {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(3rem, 7vw, 5rem);
+  color: var(--coral);
+  text-shadow: 4px 4px 0 var(--yellow), 0 0 40px rgba(255,107,107,0.3);
+  animation: titleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes titleIn {
+  from { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+header p {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: rgba(255,255,255,0.7);
+  margin-top: 16px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.4s forwards;
+}
+
+.heart-line {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 1.5rem;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.3); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.2); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sections grid */
+.sections {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Section card */
+.section-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.section-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--card-accent, var(--coral)), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.section-card:hover::before {
+  opacity: 0.08;
+}
+
+.section-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--card-accent, var(--coral));
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px var(--card-glow, rgba(255,107,107,0.15));
+}
+
+.section-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.section-card.locked:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255,255,255,0.1);
+}
+
+.card-emoji {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  display: block;
+  animation: cardFloat 3s ease-in-out infinite;
+}
+
+.section-card:nth-child(2) .card-emoji { animation-delay: 0.5s; }
+.section-card:nth-child(3) .card-emoji { animation-delay: 1s; }
+.section-card:nth-child(4) .card-emoji { animation-delay: 1.5s; }
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.card-title {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: var(--card-accent, var(--coral));
+  position: relative;
+  z-index: 1;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.card-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.card-badge.live {
+  background: rgba(78,205,196,0.2);
+  color: var(--teal);
+  border: 1px solid var(--teal);
+}
+
+.card-badge.coming {
+  background: rgba(167,139,250,0.2);
+  color: var(--purple);
+  border: 1px solid var(--purple);
+}
+
+.card-badge.locked-badge {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* CTA card (create new) */
+.section-card.cta {
+  border-style: dashed;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.section-card.cta:hover {
+  border-color: var(--yellow);
+}
+
+.section-card.cta .card-emoji {
+  opacity: 0.5;
+}
+
+.section-card.cta .card-title {
+  color: rgba(255,255,255,0.6);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 20px 60px;
+  position: relative;
+  z-index: 10;
+}
+
+footer p {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: var(--coral);
+}
+
+footer .sub {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+}
+
+/* Wave */
+.wave {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.wave svg {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+  animation: waveMove 8s linear infinite;
+}
+
+@keyframes waveMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header { padding: 50px 15px 30px; }
+  .sections { padding: 20px 15px; gap: 20px; }
+  .section-card { padding: 30px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+<header>
+  <h1>For Her 💕</h1>
+  <p>A collection of everything I've built for her — one memory at a time</p>
+  <div class="heart-line">❤️ 🌸 💕 ✨ 💗</div>
+</header>
+
+<main class="sections" id="sections">
+  <!-- Populated by JS -->
+</main>
+
+<footer>
+  <p>Made with <span class="heart-line" style="display:inline-block; animation:heartbeat 1.5s infinite">❤️</span></p>
+  <p class="sub">More coming soon...</p>
+</footer>
+
+<div class="wave">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 C150,50 350,10 500,30 C650,50 850,10 1000,30 C1150,50 1200,30 1200,30 L1200,60 L0,60 Z" fill="rgba(78,205,196,0.2)"/>
+    <path d="M0,40 C150,20 350,50 500,40 C650,20 850,50 1000,40 C1150,20 1200,40 1200,40 L1200,60 L0,60 Z" fill="rgba(78,205,196,0.1)"/>
+  </svg>
+</div>
+
+<script>
+const sections = [
+  {
+    title: "Summer 2025",
+    emoji: "☀️",
+    desc: "The summer we finally stopped being long distance. Columbus, Cedar Point, water lanterns, Crew games — our whole story.",
+    href: "./summer/",
+    badge: "LIVE",
+    accent: "#FF6B6B",
+    glow: "rgba(255,107,107,0.2)",
+    locked: false
+  },
+  {
+    title: "1 Year Anniversary",
+    emoji: "💝",
+    desc: "Coming soon — a whole site dedicated to our first year together. The distance, the calls, the reunions.",
+    href: "#",
+    badge: "COMING SOON",
+    accent: "#A78BFA",
+    glow: "rgba(167,139,250,0.2)",
+    locked: true
+  },
+  {
+    title: "More Coming",
+    emoji: "✨",
+    desc: "Valentine's, birthdays, random Tuesdays — every moment deserves a page.",
+    href: "#",
+    badge: "IDEAS WELCOME",
+    accent: "#FFD93D",
+    glow: "rgba(255,217,61,0.2)",
+    locked: true
+  }
+];
+
+const container = document.getElementById('sections');
+
+sections.forEach((s, i) => {
+  const card = document.createElement('a');
+  card.className = `section-card ${s.locked ? 'locked' : ''}`;
+  card.href = s.href;
+  card.style.setProperty('--card-accent', s.accent);
+  card.style.setProperty('--card-glow', s.glow);
+  card.style.animation = `fadeInUp 0.5s ease ${0.2 * i}s backwards`;
+
+  if (s.locked) {
+    card.onclick = (e) => e.preventDefault();
+  }
+
+  card.innerHTML = `
+    <span class="card-emoji">${s.emoji}</span>
+    <h3 class="card-title">${s.title}</h3>
+    <p class="card-desc">${s.desc}</p>
+    <span class="card-badge ${s.locked ? (s.badge === 'COMING SOON' ? 'coming' : 'locked-badge') : 'live'}">${s.badge}</span>
+  `;
+
+  container.appendChild(card);
+});
+</script>
+
+</body>
+</html>
