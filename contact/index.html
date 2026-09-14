@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Vaish</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Caveat:wght@500;700&display=swap');
+
+:root {
+  --brown-dark: #2C1810;
+  --brown: #4A3728;
+  --brown-medium: #6B4E37;
+  --brown-light: #8B7355;
+  --caramel: #C4944A;
+  --golden: #D4A853;
+  --terracotta: #C97B63;
+  --sage: #7BA69C;
+  --cream: #FFF8F0;
+  --beige: #F5EDE0;
+  --beige-dark: #E8DCC8;
+  --sand: #D4B896;
+  --white: #FEFCF8;
+  --ink: #2C1810;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: linear-gradient(135deg, var(--beige) 0%, var(--cream) 40%, var(--sand) 100%);
+  min-height: 100vh;
+  color: var(--ink);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(196,148,74,0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(201,123,99,0.08) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: var(--caramel);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 1;
+  animation: particleFloat 10s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.35; }
+  90% { opacity: 0.35; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
+
+header {
+  text-align: center;
+  padding: 80px 20px 40px;
+  position: relative;
+  z-index: 10;
+}
+
+header h1 {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(3rem, 7vw, 5rem);
+  color: var(--brown);
+  text-shadow: 4px 4px 0 var(--caramel), 0 0 40px rgba(196,148,74,0.2);
+}
+
+header p {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--brown-medium);
+  margin-top: 16px;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav a {
+  color: var(--brown);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  border-color: var(--caramel);
+  color: var(--caramel);
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  position: relative;
+  z-index: 10;
+}
+
+.contact-card {
+  background: var(--white);
+  border: 2px solid var(--beige-dark);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 8px 30px rgba(44,24,16,0.08);
+}
+
+.contact-card h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  color: var(--brown);
+  margin-bottom: 20px;
+}
+
+.contact-card p {
+  font-size: 1rem;
+  color: var(--brown-medium);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--beige-dark);
+  text-decoration: none;
+  color: var(--brown);
+  transition: all 0.2s;
+}
+
+.contact-link:hover {
+  color: var(--caramel);
+}
+
+.contact-link:last-child {
+  border-bottom: none;
+}
+
+.contact-icon {
+  font-size: 1.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px 60px;
+  position: relative;
+  z-index: 10;
+}
+
+footer p {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: var(--brown);
+}
+
+footer .sub {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  margin-top: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+<div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+<div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+<div class="particle" style="left: 70%; animation-delay: 1s;"></div>
+<div class="particle" style="left: 90%; animation-delay: 3s;"></div>
+
+<header>
+  <h1>Contact Us ✉️</h1>
+  <p>Got something to add? Send it our way</p>
+  <div class="nav">
+    <a href="../photobooks/">📸 Photo Books</a>
+    <a href="../about/">💝 About Us</a>
+    <a href="../contact/" class="active">✉️ Contact Us</a>
+  </div>
+</header>
+
+<main>
+  <div class="contact-card">
+    <h2>Get in Touch</h2>
+    <p>Got a memory to add? A story to tell? A photo to share? Send it over and we'll add it to the collection.</p>
+    
+    <a href="mailto:aksharjothi@gmail.com" class="contact-link">
+      <span class="contact-icon">📧</span>
+      <span>aksharjothi@gmail.com</span>
+    </a>
+    <a href="#" class="contact-link">
+      <span class="contact-icon">📷</span>
+      <span>@aksharjothi</span>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>Made with 🤎</p>
+  <p class="sub">Vaish — A collection of us</p>
+</footer>
+
+</body>
+</html>

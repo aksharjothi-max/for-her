@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Start 🌅</title>
+<title>The Start</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Caveat:wght@500;700&display=swap');
 
@@ -34,7 +34,6 @@ body {
   color: var(--ink);
 }
 
-/* Subtle background pattern */
 body::before {
   content: '';
   position: fixed;
@@ -45,7 +44,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Sun decoration */
 body::after {
   content: '';
   position: fixed;
@@ -65,7 +63,6 @@ body::after {
   50% { transform: scale(1.08); opacity: 0.65; }
 }
 
-/* Floating particles */
 .particle {
   position: fixed;
   width: 4px;
@@ -85,7 +82,6 @@ body::after {
   100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
-/* Header */
 header {
   text-align: center;
   padding: 50px 20px 25px;
@@ -116,25 +112,11 @@ header .subtitle {
   animation: fadeInUp 0.5s ease 0.3s forwards;
 }
 
-header .dates {
-  display: inline-block;
-  padding: 5px 16px;
-  background: var(--beige-dark);
-  border-radius: 18px;
-  color: var(--brown);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 10px;
-  opacity: 0;
-  animation: fadeInUp 0.5s ease 0.5s forwards;
-}
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Page dots */
 .page-dots {
   display: flex;
   justify-content: center;
@@ -174,7 +156,6 @@ header .dates {
   color: white;
 }
 
-/* Book container */
 .book-container {
   max-width: 1000px;
   margin: 20px auto;
@@ -183,7 +164,6 @@ header .dates {
   z-index: 10;
 }
 
-/* Spread layout */
 .spread {
   display: none;
   grid-template-columns: 1fr 1fr;
@@ -204,7 +184,6 @@ header .dates {
   .spread.active { grid-template-columns: 1fr; }
 }
 
-/* Page */
 .page {
   background: var(--white);
   border-radius: 18px;
@@ -220,7 +199,6 @@ header .dates {
   border-color: var(--caramel);
 }
 
-/* Lock overlay */
 .lock-overlay {
   position: absolute;
   inset: 0;
@@ -287,7 +265,6 @@ header .dates {
   background: var(--golden);
 }
 
-/* Trivia modal */
 .trivia-backdrop {
   position: fixed;
   inset: 0;
@@ -410,7 +387,15 @@ header .dates {
 
 .trivia-close:hover { background: var(--brown-medium); transform: scale(1.05); }
 
-/* Page info */
+#triviaImage {
+  text-align: center;
+  margin-top: 12px;
+}
+
+#triviaTryAgain {
+  display: none;
+}
+
 .page-info {
   padding: 18px;
 }
@@ -439,7 +424,6 @@ header .dates {
   margin-top: 7px;
 }
 
-/* Navigation */
 .nav-controls {
   display: flex;
   justify-content: center;
@@ -474,7 +458,6 @@ header .dates {
 .nav-btn.next { background: var(--brown); color: var(--cream); }
 .nav-btn.next:hover:not(:disabled) { background: var(--brown-medium); }
 
-/* Progress bar */
 .progress-section {
   max-width: 1000px;
   margin: 18px auto 0;
@@ -506,7 +489,6 @@ header .dates {
   margin-top: 9px;
 }
 
-/* Back link */
 .back-link {
   display: inline-block;
   margin: 20px auto;
@@ -525,7 +507,6 @@ header .dates {
   color: white;
 }
 
-/* Footer */
 footer {
   text-align: center;
   padding: 35px 20px 55px;
@@ -551,7 +532,6 @@ footer .heart {
   45% { transform: scale(1.15); }
 }
 
-/* Placeholder image */
 .placeholder-img {
   width: 100%;
   aspect-ratio: 4/3;
@@ -571,12 +551,6 @@ footer .heart {
   opacity: 0.12;
 }
 
-.placeholder-img span {
-  position: relative;
-  z-index: 1;
-}
-
-/* Confetti burst */
 .confetti {
   position: fixed;
   z-index: 200;
@@ -599,7 +573,7 @@ footer .heart {
 <div class="particle" style="left: 90%; animation-delay: 2s;"></div>
 
 <header>
-  <h1>The Start 🌅</h1>
+  <h1>The Start</h1>
   <p class="subtitle">This is where it all started from August to before we were official!</p>
 </header>
 
@@ -616,7 +590,7 @@ footer .heart {
   <div class="progress-bar">
     <div class="progress-fill" id="progressFill"></div>
   </div>
-  <p class="progress-text" id="progressText">Unlock 0 of 0 memories ✨</p>
+  <p class="progress-text" id="progressText">Unlock 0 of 0 memories</p>
 </div>
 
 <div style="text-align: center;">
@@ -629,7 +603,7 @@ footer .heart {
     <p class="question" id="triviaQuestion"></p>
     <div class="trivia-options" id="triviaOptions"></div>
     <div class="trivia-result" id="triviaResult"></div>
-    <div id="triviaImage" style="text-align:center; margin-top:12px; display:none;"></div>
+    <div id="triviaImage" style="display:none;"></div>
     <button class="trivia-close" id="triviaClose" style="display:none;" onclick="closeTrivia()">Continue</button>
     <button class="trivia-close" id="triviaTryAgain" style="display:none;" onclick="tryAgain()">Try Again</button>
   </div>
@@ -643,121 +617,138 @@ footer .heart {
 const spreads = [
   {
     month: "August",
-    href: null,
     left: {
-      title: "Flirtatiousness 🎸",
+      title: "Flirtatiousness",
       description: "It started in Tennessee — I was at a wedding, she was still in Ohio. But something shifted. Messages got longer, calls got later, and suddenly we weren't just friends anymore.",
-      emoji: "🎸",
       accent1: "#6B4E37",
       accent2: "#C97B63",
       date: "Early August",
       tag: "Flirting",
       trivia: {
         question: "What state was Akshar in during the start of our flirtatiousness?",
-        options: ["Tennessee 🎸", "Ohio 🌽", "Texas 🤠", "Florida 🌴"],
+        options: ["Tennessee", "Ohio", "Texas", "Florida"],
         correct: 0
       }
     },
     right: {
-      title: "Falling for You 🍂",
+      title: "Falling for You",
       description: "First time sleeping on FaceTime together. Didn't want to hang up. Fell asleep to each other's breathing. Long distance never felt so close.",
-      emoji: "📱",
       accent1: "#4A3728",
       accent2: "#6B4E37",
       date: "August 16, 2025",
       tag: "First",
       trivia: {
         question: "What was the date we first slept on FaceTime?",
-        options: ["August 14 📱", "August 16 🌙", "August 18 💕", "August 20 🌸"],
+        options: ["August 14", "August 16", "August 18", "August 20"],
         correct: 1
       }
     }
   },
   {
+    month: "August",
+    left: {
+      title: "August 25: First Kiss",
+      description: "First kiss — on FaceTime, because that's what we had. But it counted. It absolutely counted. Long distance couldn't stop this one.",
+      accent1: "#C97B63",
+      accent2: "#C4944A",
+      date: "August 25, 2025",
+      tag: "Milestone",
+      trivia: {
+        question: "How did we kiss for the first time?",
+        options: ["On FaceTime", "In person", "Through a letter", "In a dream"],
+        correct: 0
+      }
+    },
+    right: {
+      title: "More Soon",
+      description: "Keep adding your memories to fill this page...",
+      accent1: "#C4944A",
+      accent2: "#8B7355",
+      date: "September 2025",
+      tag: "Soon",
+      trivia: {
+        question: "What month comes after August?",
+        options: ["September", "October", "November", "December"],
+        correct: 0
+      }
+    }
+  },
+  {
     month: "September",
-    href: null,
     left: {
       title: "September 16 😏",
       description: "She forgot her nighty and just crawled across the room to her camera on FaceTime. Completely naked. I couldn't look away.",
-      emoji: "😳",
       accent1: "#C97B63",
       accent2: "#6B4E37",
       date: "September 16, 2025",
       tag: "Oops",
       trivia: {
         question: "What happened on September 16 during our FaceTime?",
-        options: ["She crawled across the room naked 😏", "She gave a dance performance 💃", "She fell asleep on camera 💤", "She ordered food naked 🍔"],
+        options: ["She crawled across the room naked", "She gave a dance performance", "She fell asleep on camera", "She ordered food naked"],
         correct: 0
       }
     },
     right: {
-      title: "September 18: First 'I Love You' ❤️",
+      title: "September 18 — Akshar's First 'I Love You' ❤️",
       description: "First time I said 'I love you' to her. Three words that changed everything. Distance didn't matter anymore — this was real.",
-      emoji: "❤️",
       accent1: "#C4944A",
       accent2: "#C97B63",
       date: "September 18, 2025",
       tag: "Milestone",
       trivia: {
-        question: "What date did I first say 'I love you'?",
-        options: ["September 16 💋", "September 18 ❤️", "September 20 💕", "September 22 🥰"],
+        question: "What date did Akshar first say 'I love you'?",
+        options: ["September 16", "September 18", "October 2", "October 17"],
         correct: 1
       }
     }
   },
   {
     month: "October",
-    href: null,
     left: {
-      title: "October 2 ❤️",
+      title: "October 2 — Vaishnavi's First 'I Love You' ❤️",
       description: "The day she said 'I love you' for the first time. The words I'd been waiting to hear.",
-      emoji: "❤️",
       accent1: "#C97B63",
       accent2: "#C4944A",
       date: "October 2, 2025",
       tag: "Milestone",
       trivia: {
-        question: "What did Vaishnavi say for the first time on October 2?",
-        options: ["I love you ❤️", "I miss you 💕", "I'm sorry 🙏", "Good night 🌙"],
-        correct: 0
+        question: "What date did Vaishnavi first say 'I love you'?",
+        options: ["September 18", "October 2", "October 17", "November 27"],
+        correct: 1
       }
     },
     right: {
       title: "October 17 💋",
       description: "The first day we ever met in person. And the day we had our actual first kiss. Not on FaceTime — for real.",
-      emoji: "💋",
       accent1: "#D4A853",
       accent2: "#C97B63",
       date: "October 17, 2025",
       tag: "Firsts",
       trivia: {
         question: "What happened on October 17?",
-        options: ["First date 🌹", "First meeting + actual first kiss 💋", "First trip together ✈️", "First time meeting family 👨‍👩‍👧"],
+        options: ["First date", "First meeting + actual first kiss", "First trip together", "First time meeting family"],
         correct: 1
       }
     }
   },
   {
     month: "November",
-    href: null,
     left: {
       title: "November 2025 🦃",
       description: "Coming soon...",
-      emoji: "🦃",
       accent1: "#C4944A",
       accent2: "#C97B63",
       date: "November 2025",
       tag: "Coming Soon",
       trivia: {
         question: "What holiday is in November?",
-        options: ["Halloween 🎃", "Thanksgiving 🦃", "Christmas 🎄", "Valentine's 💝"],
+        options: ["Halloween", "Thanksgiving", "Christmas", "Valentine's"],
         correct: 1
       }
     },
     right: {
-      title: "More Memories ✨",
+      title: "More Memories",
       description: "Coming soon...",
-      emoji: "✨",
       accent1: "#8B7355",
       accent2: "#6B4E37",
       date: "November 2025",
@@ -771,32 +762,29 @@ const spreads = [
   },
   {
     month: "December",
-    href: null,
     left: {
       title: "December 2025 🎄",
       description: "Coming soon...",
-      emoji: "🎄",
       accent1: "#7BA69C",
       accent2: "#C97B63",
       date: "December 2025",
       tag: "Coming Soon",
       trivia: {
         question: "What holiday is in December?",
-        options: ["Halloween 🎃", "Thanksgiving 🦃", "Christmas 🎄", "Easter 🐣"],
+        options: ["Halloween", "Thanksgiving", "Christmas", "Easter"],
         correct: 2
       }
     },
     right: {
       title: "December 28: Day Before 💕",
       description: "The day before everything changed. One more day of 'almost.' Then came the 29th...",
-      emoji: "💕",
       accent1: "#C97B63",
       accent2: "#C4944A",
       date: "December 28, 2025",
       tag: "Almost",
       trivia: {
         question: "What comes on December 29?",
-        options: ["My birthday 🎂", "We become official 💕", "Christmas 🎄", "New Year 🎆"],
+        options: ["My birthday", "We become official", "Christmas", "New Year"],
         correct: 1
       }
     }
@@ -905,7 +893,7 @@ function updateProgress() {
   const done = unlocked.size;
   const pct = total > 0 ? (done / total) * 100 : 0;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = `Unlocked ${done} of ${total} memories ✨`;
+  document.getElementById('progressText').textContent = `Unlocked ${done} of ${total} memories`;
 }
 
 let currentTriviaId = null;
@@ -934,7 +922,13 @@ function openTrivia(id) {
   document.getElementById('triviaResult').className = 'trivia-result';
   document.getElementById('triviaImage').style.display = 'none';
   document.getElementById('triviaClose').style.display = 'none';
+  document.getElementById('triviaTryAgain').style.display = 'none';
   document.getElementById('triviaBackdrop').classList.add('show');
+}
+
+function tryAgain() {
+  document.getElementById('triviaTryAgain').style.display = 'none';
+  openTrivia(currentTriviaId);
 }
 
 function checkAnswer(btn, selected, correct) {
@@ -950,6 +944,7 @@ function checkAnswer(btn, selected, correct) {
     document.getElementById('triviaResult').textContent = '🎉 Perfect! Memory unlocked!';
     document.getElementById('triviaResult').className = 'trivia-result success';
     document.getElementById('triviaClose').style.display = 'inline-block';
+    document.getElementById('triviaTryAgain').style.display = 'none';
     unlockPage(currentTriviaId);
     fireConfetti();
     imgDiv.innerHTML = `<div style="font-size:4rem;">🎉</div><div style="font-size:0.85rem; color:var(--brown-medium); margin-top:4px;">Celebration picture coming soon!</div>`;
@@ -984,11 +979,6 @@ function unlockPage(id) {
   }
   updateProgress();
   updateDots();
-}
-
-function tryAgain() {
-  document.getElementById('triviaTryAgain').style.display = 'none';
-  openTrivia(currentTriviaId);
 }
 
 function closeTrivia() {
