@@ -460,11 +460,9 @@ footer .sub {
   <h1>Vaish</h1>
   <p>A collection of us and our time together</p>
   <div class="nav">
-    <a href="#aug">AUG</a>
-    <a href="#sep">SEP</a>
-    <a href="#oct">OCT</a>
-    <a href="#nov">NOV</a>
-    <a href="#dec">DEC</a>
+    <a href="#photobooks">📸 Photo Books</a>
+    <a href="#about">💝 About Us</a>
+    <a href="#contact">✉️ Contact Us</a>
   </div>
 </header>
 
@@ -573,9 +571,9 @@ sections.forEach((s, i) => {
   }
 
   card.innerHTML = `
-    <p class="card-desc">${s.desc}</p>
     <span class="card-emoji">${s.emoji}</span>
     <h3 class="card-title">${s.title}</h3>
+    <p class="card-desc">${s.desc}</p>
     <span class="card-badge ${s.locked ? (s.badge === 'COMING SOON' ? 'coming' : 'locked-badge') : 'live'}">${s.badge}</span>
   `;
   card.id = s.month ? s.month.toLowerCase() : s.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -591,13 +589,45 @@ const container2 = document.getElementById('sections');
 // Add month photo book links
 const monthSection = document.createElement('div');
 monthSection.className = 'month-section';
+monthSection.id = 'photobooks';
 monthSection.innerHTML = `
   <h2 class="month-title">Photo Books</h2>
   <div class="month-grid">
-    ${months.map((m, i) => `<a href="#${m}" class="month-card ${m}">${monthNames[i]}</a>`).join('')}
+    ${months.map((m, i) => `<a href="./start/?month=${m}" class="month-card ${m}">${monthNames[i]}</a>`).join('')}
   </div>
 `;
+
+// About section
+const aboutSection = document.createElement('div');
+aboutSection.className = 'month-section';
+aboutSection.id = 'about';
+aboutSection.innerHTML = `
+  <h2 class="month-title">About Us</h2>
+  <div class="about-text">
+    <p>This is our little corner of the internet. A place to keep track of our story — from the first "hello" to whatever comes next.</p>
+    <p>Started: August 2025</p>
+    <p>Location: Long distance — Texas to Ohio</p>
+    <p>Status: Very much in love 💕</p>
+  </div>
+`;
+
+// Contact section
+const contactSection = document.createElement('div');
+contactSection.className = 'month-section';
+contactSection.id = 'contact';
+contactSection.innerHTML = `
+  <h2 class="month-title">Contact Us</h2>
+  <div class="contact-text">
+    <p>Got a memory to add? A story to tell? A photo to share?</p>
+    <p>Send it over and we'll add it to the collection.</p>
+    <p>Email: <a href="mailto:aksharjothi@gmail.com">aksharjothi@gmail.com</a></p>
+    <p>Instagram: @aksharjothi</p>
+  </div>
+`;
+
 container2.appendChild(monthSection);
+container2.appendChild(aboutSection);
+container2.appendChild(contactSection);
 
 // Smooth scroll for nav
 document.querySelectorAll('.nav a').forEach(a => {
