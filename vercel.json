@@ -1,0 +1,12 @@
+{
+  "name": "for-her",
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/summer", "destination": "/summer/index.html" },
+    { "source": "/summer/:path*", "destination": "/summer/index.html" }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}
