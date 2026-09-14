@@ -820,7 +820,7 @@ function renderPage(page, id) {
   const isUnlocked = unlocked.has(id);
   const hasImage = page.image || page.img;
   const imgHtml = hasImage 
-    ? `<img src="${hasImage}" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block;" />`
+    ? `<img src="${hasImage}" style="width:100%; display:block;" />`
     : `<div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>`;
   return `
     <div class="page ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
