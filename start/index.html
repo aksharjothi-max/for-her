@@ -648,6 +648,7 @@ const spreads = [
     left: {
       title: "Flirtatiousness",
       description: "I was in Tennessee, we were closer than ever. The wedding vibes started to get to me and that caused a shift. Our messages got flirtier, texts became more important, and suddenly we weren't just friends anymore.",
+      image: "./images/flirtatiousness.jpg",
       accent1: "#6B4E37", accent2: "#C97B63",
       date: "August 2025", tag: "Flirting",
       trivia: { question: "What state was Akshar in during the start of our flirtatiousness?", options: ["Tennessee", "Ohio", "Texas", "Florida"], correct: 0 }
@@ -814,11 +815,16 @@ function renderBook() {
   });
 }
 
+
 function renderPage(page, id) {
   const isUnlocked = unlocked.has(id);
+  const hasImage = page.image || page.img;
+  const imgHtml = hasImage 
+    ? `<img src="${hasImage}" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block;" />`
+    : `<div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>`;
   return `
     <div class="page ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
-      <div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>
+      ${imgHtml}
       <div class="lock-overlay">
         <div class="lock-icon">🔒</div>
         <div class="lock-text">Unlock this memory</div>
