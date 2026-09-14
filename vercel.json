@@ -4,9 +4,9 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/summer", "destination": "/summer/index.html" },
-    { "source": "/summer/:path*", "destination": "/summer/index.html" }
+    { "source": "/start/images/:path*", "destination" : "/images/:path*" }
   ],
+  "redirects": [],
   "cleanUrls": true,
   "trailingSlash": false
 }
