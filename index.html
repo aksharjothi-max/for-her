@@ -125,6 +125,37 @@ header p {
   z-index: 10;
 }
 
+/* Nav bar */
+.nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav a {
+  color: var(--brown);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  border-color: var(--caramel);
+  color: var(--caramel);
+}
+
+/* Nav link to each month */
+.nav-link.active {
+  color: var(--caramel);
+}
+
 /* Card description inside */
 .card-desc {
   font-size: 0.85rem;
@@ -243,6 +274,45 @@ header p {
 }
 
 
+
+/* Month section */
+.month-section {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+}
+
+.month-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.8rem;
+  color: var(--brown);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.month-card {
+  background: var(--white);
+  border: 2px solid var(--beige-dark);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--brown);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.month-card:hover {
+  border-color: var(--caramel);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(44,24,16,0.1);
+}
 
 /* Footer */
 footer {
@@ -387,9 +457,15 @@ footer .sub {
 <div class="particle" style="left: 90%; animation-delay: 3s;"></div>
 
 <header>
-  <h1>For Her 🤎</h1>
-  <p>A collection of everything I've built for her — one memory at a time</p>
-  <div class="heart-line">🤎 ✨ 💕</div>
+  <h1>Vaish</h1>
+  <p>A collection of us and our time together</p>
+  <div class="nav">
+    <a href="#aug">AUG</a>
+    <a href="#sep">SEP</a>
+    <a href="#oct">OCT</a>
+    <a href="#nov">NOV</a>
+    <a href="#dec">DEC</a>
+  </div>
 </header>
 
 <main class="sections" id="sections">
@@ -434,6 +510,7 @@ const sections = [
     title: "The Start",
     emoji: "🌅",
     desc: "Where we started",
+    month: "August",
     href: "./start/",
     badge: "LIVE",
     accent: "#C97B63",
@@ -443,7 +520,8 @@ const sections = [
   {
     title: "Our Anniversary",
     emoji: "💝",
-    desc: "Coming soon nice try trying to get a peek",
+    desc: "",
+    month: "Anniversary",
     href: "#",
     badge: "COMING SOON",
     accent: "#C4944A",
@@ -454,6 +532,7 @@ const sections = [
     title: "Summer 2025",
     emoji: "☀️",
     desc: "Columbus, Cedar Point, water lanterns, Crew games — our whole story.",
+    month: "Summer",
     href: "#",
     badge: "COMING SOON",
     accent: "#7BA69C",
@@ -473,8 +552,9 @@ document.addEventListener('click', (e) => {
   if (lockedCard) {
     e.preventDefault();
     const desc = lockedCard.querySelector('.card-desc');
+    const descText = desc && desc.textContent.trim() ? desc.textContent : 'This section is not ready yet.';
     const title = lockedCard.querySelector('.card-title');
-    showLockedPopup(title ? title.textContent : 'Coming Soon', desc ? desc.textContent : 'This section is not ready yet.');
+    showLockedPopup(title ? title.textContent : 'Coming Soon', descText);
   }
 });
 
@@ -498,8 +578,34 @@ sections.forEach((s, i) => {
     <h3 class="card-title">${s.title}</h3>
     <span class="card-badge ${s.locked ? (s.badge === 'COMING SOON' ? 'coming' : 'locked-badge') : 'live'}">${s.badge}</span>
   `;
+  card.id = s.month ? s.month.toLowerCase() : s.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
   container.appendChild(card);
+});
+
+// Month sections for nav
+const months = ['aug', 'sep', 'oct', 'nov', 'dec'];
+const monthNames = ['August', 'September', 'October', 'November', 'December'];
+const container2 = document.getElementById('sections');
+
+// Add month photo book links
+const monthSection = document.createElement('div');
+monthSection.className = 'month-section';
+monthSection.innerHTML = `
+  <h2 class="month-title">Photo Books</h2>
+  <div class="month-grid">
+    ${months.map((m, i) => `<a href="#${m}" class="month-card ${m}">${monthNames[i]}</a>`).join('')}
+  </div>
+`;
+container2.appendChild(monthSection);
+
+// Smooth scroll for nav
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
 });
 </script>
 
