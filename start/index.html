@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Summer Together ☀️🤎</title>
+<title>The Start 🌅</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Caveat:wght@500;700&display=swap');
 
@@ -28,30 +28,41 @@
 
 body {
   font-family: 'Fredoka', sans-serif;
-  background: linear-gradient(180deg, var(--sand) 0%, var(--cream) 40%, var(--beige-dark) 100%);
+  background: linear-gradient(180deg, var(--beige) 0%, var(--cream) 30%, var(--sand) 100%);
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--ink);
 }
 
-/* Sun */
+/* Subtle background pattern */
 body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(196,148,74,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(201,123,99,0.08) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Sun decoration */
+body::after {
   content: '';
   position: fixed;
   top: -60px;
   right: -60px;
-  width: 240px;
-  height: 240px;
+  width: 220px;
+  height: 220px;
   background: radial-gradient(circle, var(--golden) 0%, var(--caramel) 40%, transparent 70%);
   border-radius: 50%;
-  opacity: 0.55;
+  opacity: 0.5;
   z-index: 0;
   animation: sunPulse 4s ease-in-out infinite;
 }
 
 @keyframes sunPulse {
-  0%, 100% { transform: scale(1); opacity: 0.55; }
-  50% { transform: scale(1.08); opacity: 0.75; }
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.08); opacity: 0.7; }
 }
 
 /* Floating particles */
@@ -74,51 +85,17 @@ body::before {
   100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
-/* Palm trees */
-.palm {
+/* Tennessee silhouette */
+.tn-skyline {
   position: fixed;
   bottom: 0;
-  width: 60px;
-  height: 200px;
-  z-index: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 1;
+  opacity: 0.15;
+  pointer-events: none;
 }
-
-.palm-trunk {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 140px;
-  background: linear-gradient(90deg, var(--brown-dark), var(--brown), var(--brown-dark));
-  border-radius: 6px 6px 0 0;
-}
-
-.palm-leaf {
-  position: absolute;
-  bottom: 120px;
-  left: 50%;
-  width: 60px;
-  height: 25px;
-  background: linear-gradient(90deg, var(--sage), #5a8a7a);
-  border-radius: 0 50% 0 50%;
-  transform-origin: left center;
-  animation: palmSway 3s ease-in-out infinite;
-}
-
-.palm-leaf:nth-child(2) { transform: rotate(-30deg); animation-delay: 0.5s; }
-.palm-leaf:nth-child(3) { transform: rotate(-90deg); animation-delay: 1s; }
-.palm-leaf:nth-child(4) { transform: rotate(-150deg); animation-delay: 1.5s; }
-.palm-leaf:nth-child(5) { transform: rotate(30deg); animation-delay: 0.3s; }
-.palm-leaf:nth-child(6) { transform: rotate(90deg); animation-delay: 0.8s; }
-
-@keyframes palmSway {
-  0%, 100% { transform: rotate(var(--base, -30deg)) translateY(0); }
-  50% { transform: rotate(var(--base, -30deg)) translateY(-3px); }
-}
-
-.palm-left { left: 20px; }
-.palm-right { right: 20px; }
 
 /* Header */
 header {
@@ -130,7 +107,7 @@ header {
 
 header h1 {
   font-family: 'Caveat', cursive;
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   color: var(--brown);
   text-shadow: 3px 3px 0 var(--caramel), -1px -1px 0 rgba(0,0,0,0.05);
   animation: titleBounce 0.7s ease;
@@ -149,6 +126,19 @@ header .subtitle {
   margin-top: 8px;
   opacity: 0;
   animation: fadeInUp 0.5s ease 0.3s forwards;
+}
+
+header .dates {
+  display: inline-block;
+  padding: 5px 16px;
+  background: var(--beige-dark);
+  border-radius: 18px;
+  color: var(--brown);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease 0.5s forwards;
 }
 
 @keyframes fadeInUp {
@@ -461,15 +451,6 @@ header .subtitle {
   margin-top: 7px;
 }
 
-.page-tag {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  margin-left: 5px;
-}
-
 /* Navigation */
 .nav-controls {
   display: flex;
@@ -505,7 +486,7 @@ header .subtitle {
 .nav-btn.next { background: var(--brown); color: var(--cream); }
 .nav-btn.next:hover:not(:disabled) { background: var(--brown-medium); }
 
-/* Progress */
+/* Progress bar */
 .progress-section {
   max-width: 1000px;
   margin: 18px auto 0;
@@ -537,6 +518,25 @@ header .subtitle {
   margin-top: 9px;
 }
 
+/* Back link */
+.back-link {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 8px 20px;
+  background: var(--beige-dark);
+  color: var(--brown);
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.back-link:hover {
+  background: var(--caramel);
+  color: white;
+}
+
 /* Footer */
 footer {
   text-align: center;
@@ -563,31 +563,7 @@ footer .heart {
   45% { transform: scale(1.15); }
 }
 
-/* Wave */
-.wave {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 65px;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.wave svg {
-  position: absolute;
-  bottom: 0;
-  width: 200%;
-  height: 100%;
-  animation: waveMove 8s linear infinite;
-}
-
-@keyframes waveMove {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* Placeholder */
+/* Placeholder image */
 .placeholder-img {
   width: 100%;
   aspect-ratio: 4/3;
@@ -612,11 +588,23 @@ footer .heart {
   z-index: 1;
 }
 
-/* Confetti */
+/* Confetti burst */
 .confetti {
   position: fixed;
   z-index: 200;
   pointer-events: none;
+}
+
+/* Tennessee SVG */
+.tn-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 6px;
 }
 
 @media (max-width: 480px) {
@@ -634,27 +622,10 @@ footer .heart {
 <div class="particle" style="left: 75%; animation-delay: 5s;"></div>
 <div class="particle" style="left: 90%; animation-delay: 2s;"></div>
 
-<div class="palm palm-left">
-  <div class="palm-trunk"></div>
-  <div class="palm-leaf" style="--base: -30deg"></div>
-  <div class="palm-leaf" style="--base: -90deg"></div>
-  <div class="palm-leaf" style="--base: -150deg"></div>
-  <div class="palm-leaf" style="--base: 30deg"></div>
-  <div class="palm-leaf" style="--base: 90deg"></div>
-</div>
-
-<div class="palm palm-right">
-  <div class="palm-trunk"></div>
-  <div class="palm-leaf" style="--base: -30deg"></div>
-  <div class="palm-leaf" style="--base: -90deg"></div>
-  <div class="palm-leaf" style="--base: -150deg"></div>
-  <div class="palm-leaf" style="--base: 30deg"></div>
-  <div class="palm-leaf" style="--base: 90deg"></div>
-</div>
-
 <header>
-  <h1>Our Summer Together ☀️🤎</h1>
-  <p class="subtitle">Long distance finally ended — here's every moment we made count</p>
+  <h1>The Start 🌅</h1>
+  <p class="subtitle">August 2025 — When everything changed</p>
+  <span class="dates">Tennessee ✈️ Long Distance</span>
 </header>
 
 <div class="page-dots" id="pageDots"></div>
@@ -673,6 +644,10 @@ footer .heart {
   <p class="progress-text" id="progressText">Unlock 0 of 0 memories ✨</p>
 </div>
 
+<div style="text-align: center;">
+  <a href="../" class="back-link">← Back to Home</a>
+</div>
+
 <div class="trivia-backdrop" id="triviaBackdrop">
   <div class="trivia-card">
     <h3 id="triviaTitle">🔒 Memory Lock</h3>
@@ -684,375 +659,70 @@ footer .heart {
 </div>
 
 <footer>
-  <p>Made with <span class="heart">🤎</span> for the best summer ever</p>
+  <p>Made with <span class="heart">🤎</span> — Where it all began</p>
 </footer>
-
-<div class="wave">
-  <svg viewBox="0 0 1200 65" preserveAspectRatio="none">
-    <path d="M0,32 C150,52 350,12 500,32 C650,52 850,12 1000,32 C1150,52 1200,32 1200,32 L1200,65 L0,65 Z" fill="rgba(212,184,150,0.35)"/>
-    <path d="M0,42 C150,22 350,52 500,42 C650,22 850,52 1000,42 C1150,22 1200,42 1200,42 L1200,65 L0,65 Z" fill="rgba(212,184,150,0.18)"/>
-  </svg>
-</div>
 
 <script>
 const spreads = [
+  // SPREAD 1: Tennessee & Falling
   {
     left: {
-      title: "The Reunion 🤗",
-      description: "After months of long distance, I flew to Columbus. Best landing of my life.",
-      emoji: "✈️",
+      title: "Tennessee Days 🎸",
+      description: "Nashville, Memphis, the Smokies — Tennessee was where it started. Music, vibes, and the slow realization that I was falling hard.",
+      emoji: "🎸",
       accent1: "#6B4E37",
-      accent2: "#C4944A",
-      date: "Day 1",
-      tag: "LD Ends",
-      trivia: {
-        question: "How long had we been apart before I flew to Columbus?",
-        options: ["1 month", "3 months", "6 months", "Way too long 😭"],
-        correct: 3
-      }
-    },
-    right: {
-      title: "First Night Together 🌙",
-      description: "Stayed up way too late just talking — didn't want to waste a single minute asleep.",
-      emoji: "🌙",
-      accent1: "#C97B63",
-      accent2: "#8B7355",
-      date: "Day 1 — Night",
-      tag: "Reunion",
-      trivia: {
-        question: "What did we do on the first night in Columbus?",
-        options: ["Went to a movie 🎬", "Stayed up talking all night 💬", "Cooked dinner 🍳", "Went for a walk 🚶"],
-        correct: 1
-      }
-    }
-  },
-  {
-    left: {
-      title: "Her Birthday 🎂",
-      description: "I flew in just in time for her birthday. Best gift? Me showing up at her door.",
-      emoji: "🎂",
-      accent1: "#C97B63",
-      accent2: "#C4944A",
-      date: "Her Birthday",
-      tag: "Birthday",
-      trivia: {
-        question: "What was her reaction when I surprised her?",
-        options: ["Cried happy tears 😭", "Screamed 😱", "Didn't believe it was real 🤯", "All of the above 💝"],
-        correct: 3
-      }
-    },
-    right: {
-      title: "Birthday Dinner 🥂",
-      description: "Fancy dinner, candles, wine, and the best company in the restaurant.",
-      emoji: "🥂",
-      accent1: "#D4A853",
-      accent2: "#8B7355",
-      date: "Birthday Night",
-      tag: "Celebration",
-      trivia: {
-        question: "What did we do after her birthday dinner?",
-        options: ["Danced 💃", "Midnight walk 🌙", "Got dessert 🍰", "All of the above ✨"],
-        correct: 3
-      }
-    }
-  },
-  {
-    left: {
-      title: "Moving In Together 🏠",
-      description: "My stuff + her stuff = our stuff. Finally sharing a space after so long apart.",
-      emoji: "📦",
-      accent1: "#7BA69C",
-      accent2: "#D4A853",
-      date: "Week 1",
-      tag: "Living Together",
-      trivia: {
-        question: "What was the first furniture we set up?",
-        options: ["The bed 🛏️", "The kitchen table 🍽️", "The couch 🛋️", "A random lamp 💡"],
-        correct: 0
-      }
-    },
-    right: {
-      title: "Kitchen Adventures 👩‍🍳",
-      description: "Burned some meals. Made some masterpieces. Created memories every single time.",
-      emoji: "🔥",
-      accent1: "#C97B63",
-      accent2: "#7BA69C",
-      date: "Weeks 1-2",
-      tag: "Living Together",
-      trivia: {
-        question: "What was the first thing we burned cooking?",
-        options: ["The eggs 🍳", "Pasta sauce 🍝", "Garlic bread 🧄", "Nothing, we're perfect 👨‍🍳"],
-        correct: 0
-      }
-    }
-  },
-  {
-    left: {
-      title: "Water Lantern Festival 🏮",
-      description: "Columbus water lantern festival — wrote our wishes and watched them float under the stars.",
-      emoji: "🏮",
-      accent1: "#C4944A",
-      accent2: "#D4A853",
-      date: "Lantern Night",
-      tag: "Columbus",
-      trivia: {
-        question: "What did we wish for?",
-        options: ["Forever together 💝", "Good grades 📚", "More summers like this ☀️", "All of the above ✨"],
-        correct: 3
-      }
-    },
-    right: {
-      title: "Lanterns in the Water ✨",
-      description: "The whole lake lit up with tiny floating lights. The brightest one? Watching her face glow.",
-      emoji: "🌊",
-      accent1: "#8B7355",
-      accent2: "#7BA69C",
-      date: "Lantern Night",
-      tag: "Columbus",
-      trivia: {
-        question: "What color was our lantern?",
-        options: ["White ⚪", "Warm orange 🟠", "Pink 💗", "Purple 💜"],
-        correct: 1
-      }
-    }
-  },
-  {
-    left: {
-      title: "Columbus Crew Game ⚽",
-      description: "Her first soccer game! She was screaming at the refs like a lifelong fan.",
-      emoji: "⚽",
-      accent1: "#D4A853",
-      accent2: "#7BA69C",
-      date: "Match Day",
-      tag: "Columbus Crew",
-      trivia: {
-        question: "What was the final score?",
-        options: ["2-1 🎯", "1-0 🥅", "3-2 🔥", "I was too busy watching her 👀"],
-        correct: 3
-      }
-    },
-    right: {
-      title: "Victory Lap 🏆",
-      description: "We won! She celebrated like she'd been a fan her whole life. So proud.",
-      emoji: "🏆",
-      accent1: "#7BA69C",
-      accent2: "#D4A853",
-      date: "After Match",
-      tag: "Columbus Crew",
-      trivia: {
-        question: "What did we do after the Crew won?",
-        options: ["Went to a bar 🍺", "Got late night food 🍔", "Walked downtown Columbus 🌃", "All of the above 🎉"],
-        correct: 3
-      }
-    }
-  },
-  {
-    left: {
-      title: "Cedar Point Day 🎢",
-      description: "A whole day of rollercoasters, funnel cakes, and screaming — the fun kind.",
-      emoji: "🎢",
-      accent1: "#C97B63",
-      accent2: "#8B7355",
-      date: "Cedar Point",
-      tag: "Adventure",
-      trivia: {
-        question: "Which ride scared her the most?",
-        options: ["Millennium Force 🎢", "Maverick 🌊", "Top Thrill Dragster 🚀", "Ferris wheel (windy) 🎡"],
-        correct: 2
-      }
-    },
-    right: {
-      title: "Cedar Point Sunset 🌅",
-      description: "Watched the sun set over Lake Erie from the Ferris wheel. Couldn't ask for more.",
-      emoji: "🎡",
-      accent1: "#D4A853",
       accent2: "#C97B63",
-      date: "CP Evening",
-      tag: "Adventure",
+      date: "Early August",
+      tag: "Tennessee",
       trivia: {
-        question: "What did we eat a ridiculous amount of?",
-        options: ["Funnel cake 🍩", "Corn dogs 🌭", "Cotton candy 🍭", "All of the above 🤤"],
-        correct: 3
-      }
-    }
-  },
-  {
-    left: {
-      title: "Beach Day 🏖️",
-      description: "Sand between our toes and not a care in the world. Cold water, warm hearts.",
-      emoji: "🐚",
-      accent1: "#7BA69C",
-      accent2: "#D4B896",
-      date: "Week 3",
-      tag: "Beach",
-      trivia: {
-        question: "What did we find on the beach?",
-        options: ["A sand dollar 🐚", "A crab 🦀", "A weird rock 🪨", "Nothing, too busy splashing 💦"],
-        correct: 1
-      }
-    },
-    right: {
-      title: "Sandcastle Builders 🏰",
-      description: "We tried to build a sandcastle. It looked like a sand lump. But it was OUR sand lump.",
-      emoji: "🏰",
-      accent1: "#D4B896",
-      accent2: "#C4944A",
-      date: "Beach Day",
-      tag: "Beach",
-      trivia: {
-        question: "What happened to our sandcastle?",
-        options: ["Washed away 🌊", "A kid stepped on it 👶", "Seagull attacked it 🦅", "Still standing proud 🏆"],
-        correct: 0
-      }
-    }
-  },
-  {
-    left: {
-      title: "Coffee Shop Mornings ☕",
-      description: "Every morning, same spot, same order. Our little corner of Columbus became our whole world.",
-      emoji: "☕",
-      accent1: "#6B4E37",
-      accent2: "#D4B896",
-      date: "Every Morning",
-      tag: "Daily Life",
-      trivia: {
-        question: "What was her go-to coffee order?",
-        options: ["Iced caramel macchiato 🍯", "Vanilla latte 🍦", "Black coffee 🖤", "Matcha 🍵"],
+        question: "What Tennessee city did we explore first?",
+        options: ["Nashville 🎸", "Memphis 🎵", "Gatlinburg 🏔️", "Chattanooga 🌉"],
         correct: 0
       }
     },
     right: {
-      title: "Lazy Couch Days 🛋️",
-      description: "Some days we didn't go anywhere. Just us, the couch, and a good show. Perfect.",
-      emoji: "📺",
-      accent1: "#8B7355",
-      accent2: "#7BA69C",
-      date: "Rainy Days",
-      tag: "Daily Life",
+      title: "Falling for You 🍂",
+      description: "It wasn't one moment — it was a thousand little ones. Every conversation, every laugh, every 'just one more episode.' Tennessee made it impossible not to.",
+      emoji: "🍂",
+      accent1: "#C4944A",
+      accent2: "#8B7355",
+      date: "Early August",
+      tag: "Falling",
       trivia: {
-        question: "What show did we binge?",
-        options: ["The Office 📂", "Friends 👯", "Some Korean drama 🇰🇷", "We never agreed 😂"],
-        correct: 2
-      }
-    }
-  },
-  {
-    left: {
-      title: "Exploring Columbus 🗺️",
-      description: "Short North, German Village, Scioto Mile — walked until our feet hurt. Loved every second.",
-      emoji: "🧭",
-      accent1: "#7BA69C",
-      accent2: "#C4944A",
-      date: "Weekends",
-      tag: "City",
-      trivia: {
-        question: "Favorite neighborhood to explore?",
-        options: ["Short North 🎨", "German Village 🏘️", "Easton 🛍️", "The one we got lost in 🗺️"],
-        correct: 1
-      }
-    },
-    right: {
-      title: "Spontaneous Road Trips 🚗",
-      description: "No plan, no destination. Just 'let's drive' and see where the road takes us.",
-      emoji: "🛣️",
-      accent1: "#C97B63",
-      accent2: "#D4B896",
-      date: "Random Sundays",
-      tag: "City",
-      trivia: {
-        question: "How far did we drive most spontaneously?",
-        options: ["30 min 🚗", "1 hour 🛣️", "2+ hours 🛤️", "Came back — forgot something 😂"],
+        question: "When did I realize I was falling for you?",
+        options: ["First conversation 💬", "When I saw your smile 😊", "Somewhere over Tennessee 🗺️", "All of the above 💝"],
         correct: 3
       }
     }
   },
+  // SPREAD 2: August 16 & 25
   {
     left: {
-      title: "Grocery Store Dates 🛒",
-      description: "Some people think grocery shopping is boring. They've never done it with her.",
-      emoji: "🛒",
-      accent1: "#D4A853",
-      accent2: "#7BA69C",
-      date: "Weekly",
-      tag: "Everyday",
+      title: "August 16: FaceTime Sleepover 🌙",
+      description: "First time sleeping on FaceTime together. Didn't want to hang up. Fell asleep to each other's breathing. Long distance never felt so close.",
+      emoji: "📱",
+      accent1: "#4A3728",
+      accent2: "#6B4E37",
+      date: "August 16, 2025",
+      tag: "First",
       trivia: {
-        question: "Go-to snack aisle purchase?",
-        options: ["Chips & salsa 🌮", "Ice cream 🍦", "Expensive cookies 🍪", "Whatever on sale 🤷"],
+        question: "How long did our first FaceTime sleepover last?",
+        options: ["2 hours", "4 hours", "All night long 🌅", "We're still on it 📱"],
         correct: 2
       }
     },
     right: {
-      title: "Photo Booth Moments 📸",
-      description: "Four poses, zero dignity, maximum love. These strips are my prized possession.",
-      emoji: "🤪",
+      title: "August 25: First Kiss 💋",
+      description: "First kiss — on FaceTime, because that's what we had. But it counted. It absolutely counted. Long distance couldn't stop this one.",
+      emoji: "💋",
       accent1: "#C97B63",
       accent2: "#C4944A",
-      date: "Every Mall Trip",
-      tag: "Everyday",
+      date: "August 25, 2025",
+      tag: "Milestone",
       trivia: {
-        question: "Most ridiculous pose?",
-        options: ["Duck face 🦆", "Dramatic look 💅", "Surprise face 😲", "All equally ridiculous 🤡"],
-        correct: 3
-      }
-    }
-  },
-  {
-    left: {
-      title: "Sunset Walks 🌇",
-      description: "Golden hour was our hour. The city looked beautiful, but I only had eyes on her.",
-      emoji: "🌇",
-      accent1: "#C97B63",
-      accent2: "#D4A853",
-      date: "Golden Hour",
-      tag: "Romance",
-      trivia: {
-        question: "Favorite sunset spot?",
-        options: ["Scioto Mile 🌊", "German Village Park 🌳", "Our balcony 🏠", "The parking lot 🅿️"],
+        question: "How did we kiss for the first time?",
+        options: ["On FaceTime 📱", "In person 💏", "Through a letter 💌", "In a dream 😴"],
         correct: 0
-      }
-    },
-    right: {
-      title: "Stargazing 🌌",
-      description: "Laid on the grass trying to find constellations. Mostly talked about the future.",
-      emoji: "⭐",
-      accent1: "#2C1810",
-      accent2: "#8B7355",
-      date: "Clear Nights",
-      tag: "Romance",
-      trivia: {
-        question: "First constellation she found?",
-        options: ["Big Dipper 🥄", "Orion's Belt 🔭", "Polaris 🌟", "A plane ✈️"],
-        correct: 1
-      }
-    }
-  },
-  {
-    left: {
-      title: "Last Morning 🥺",
-      description: "The last morning. Hugged a little tighter, smiled a little wider.",
-      emoji: "🥺",
-      accent1: "#C97B63",
-      accent2: "#8B7355",
-      date: "Final Day",
-      tag: "Until Next Time",
-      trivia: {
-        question: "What did we say that last morning?",
-        options: ["See you later 👋", "I love you ❤️", "Don't forget me 🥺", "All + cried 😭"],
-        correct: 3
-      }
-    },
-    right: {
-      title: "This Isn't Goodbye 💝",
-      description: "Just 'see you later.' Distance never wins when the love is this strong.",
-      emoji: "💕",
-      accent1: "#7BA69C",
-      accent2: "#D4A853",
-      date: "The End",
-      tag: "Until Next Time",
-      trivia: {
-        question: "Days until we see each other again?",
-        options: ["30 days 📅", "Too many 😭", "Who's counting when forever 💍", "Worth the wait ✨"],
-        correct: 3
       }
     }
   }
@@ -1101,7 +771,7 @@ function renderPage(page, id) {
           <h3>${page.title}</h3>
           <p>${page.description}</p>
           <span class="page-date">${page.date}</span>
-          ${page.tag ? `<span class="page-tag" style="background:${page.accent1}22; color:${page.accent1};">${page.tag}</span>` : ''}
+          ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
         </div>
       ` : ''}
     </div>
@@ -1228,7 +898,7 @@ function unlockPage(id) {
       <h3>${page.title}</h3>
       <p>${page.description}</p>
       <span class="page-date">${page.date}</span>
-      ${page.tag ? `<span class="page-tag" style="background:${page.accent1}22; color:${page.accent1};">${page.tag}</span>` : ''}
+      ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
     `;
     pageEl.appendChild(infoDiv);
   }
