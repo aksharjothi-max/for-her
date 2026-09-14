@@ -180,8 +180,14 @@ header .subtitle {
   to { opacity: 1; transform: rotateY(0); }
 }
 
+.three-cards {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 @media (max-width: 700px) {
-  .spread.active { grid-template-columns: 1fr; }
+  .three-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .page {
@@ -570,6 +576,10 @@ footer .heart {
   gap: 16px;
 }
 
+.three-cards .page {
+  min-width: 0;
+}
+
 .photo-grid-container {
   display: flex;
   flex-direction: column;
@@ -778,7 +788,7 @@ const spreads = [
   {
     month: "November",
     left: {
-      title: "November 27 — Our First Thanksgiving 🦃",
+      title: "Thankful for each other 🦃",
       description: "Our first ever Thanksgiving together. No turkey this year but we were just thankful for each other.",
       accent1: "#C4944A",
       accent2: "#C97B63",
@@ -802,32 +812,48 @@ const spreads = [
   },
   {
     month: "December",
-    left: {
-      title: "December 2025 🎄",
-      description: "Coming soon...",
-      accent1: "#7BA69C",
-      accent2: "#C97B63",
-      date: "December 2025",
-      tag: "Coming Soon",
-      trivia: {
-        question: "What holiday is in December?",
-        options: ["Halloween", "Thanksgiving", "Christmas", "Easter"],
-        correct: 2
+    layout: "three-cards",
+    cards: [
+      {
+        title: "December 24 — Arrived in Ohio 🏠",
+        description: "The first time I flew to Ohio. The start of living together. Best landing of my life.",
+        accent1: "#7BA69C",
+        accent2: "#C97B63",
+        date: "December 24, 2025",
+        tag: "First in Ohio",
+        trivia: {
+          question: "What happened on December 24?",
+          options: ["I flew to Ohio for the first time ✈️", "Our first Christmas together 🎄", "Our first date together 💕", "We met her parents 👨‍👩‍👧"],
+          correct: 0
+        }
+      },
+      {
+        title: "December 25 — Our First Christmas 🎄",
+        description: "Our first Christmas together. Spending the holidays side by side instead of on a screen.",
+        accent1: "#C97B63",
+        accent2: "#7BA69C",
+        date: "December 25, 2025",
+        tag: "First Christmas",
+        trivia: {
+          question: "What occasion did we celebrate on December 25?",
+          options: ["Thanksgiving 🦃", "New Year 🎆", "Christmas 🎄", "Valentine's ❤️"],
+          correct: 2
+        }
+      },
+      {
+        title: "December 26 — First Date Ever 🌹",
+        description: "Our first real date, planned entirely by Vaishnavi. She made it perfect.",
+        accent1: "#D4A853",
+        accent2: "#C97B63",
+        date: "December 26, 2025",
+        tag: "First Date",
+        trivia: {
+          question: "What happened on December 26?",
+          options: ["First Christmas 🎄", "First meeting 🤝", "First date ever 🌹", "First movie 🎬"],
+          correct: 2
+        }
       }
-    },
-    right: {
-      title: "December 28: Day Before 💕",
-      description: "The day before everything changed. One more day of 'almost.' Then came the 29th...",
-      accent1: "#C97B63",
-      accent2: "#C4944A",
-      date: "December 28, 2025",
-      tag: "Almost",
-      trivia: {
-        question: "What comes on December 29?",
-        options: ["My birthday", "We become official", "Christmas", "New Year"],
-        correct: 1
-      }
-    }
+    ]
   }
 ];
 
@@ -871,6 +897,15 @@ function renderBook() {
         <div class="photo-grid">
           ${spread.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
         </div>
+      `;
+      container.appendChild(div);
+    } else if (spread.layout === 'three-cards') {
+      // Three-card layout (December)
+      const div = document.createElement('div');
+      div.className = `spread ${i === 0 ? 'active' : ''}`;
+      div.id = `spread-${i}`;
+      div.innerHTML = `
+        ${spread.cards.map((card, ci) => renderPage(card, `card-${i}-${ci}`)).join('')}
       `;
       container.appendChild(div);
     } else if (spread.right && spread.right.type === 'photogrid') {
