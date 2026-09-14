@@ -180,14 +180,8 @@ header .subtitle {
   to { opacity: 1; transform: rotateY(0); }
 }
 
-.three-cards {
-  grid-template-columns: repeat(3, 1fr);
-}
-
 @media (max-width: 700px) {
-  .three-cards {
-    grid-template-columns: 1fr;
-  }
+  .spread.active { grid-template-columns: 1fr; }
 }
 
 .page {
@@ -398,10 +392,6 @@ header .subtitle {
   margin-top: 12px;
 }
 
-#triviaTryAgain {
-  display: none;
-}
-
 .page-info {
   padding: 18px;
 }
@@ -495,24 +485,6 @@ header .subtitle {
   margin-top: 9px;
 }
 
-.back-link {
-  display: inline-block;
-  margin: 20px auto;
-  padding: 8px 20px;
-  background: var(--beige-dark);
-  color: var(--brown);
-  text-decoration: none;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: var(--caramel);
-  color: white;
-}
-
 footer {
   text-align: center;
   padding: 35px 20px 55px;
@@ -557,16 +529,15 @@ footer .heart {
   opacity: 0.12;
 }
 
-.confetti {
-  position: fixed;
-  z-index: 200;
-  pointer-events: none;
+/* Three-card layout */
+.three-cards {
+  grid-template-columns: repeat(3, 1fr);
 }
 
-@media (max-width: 480px) {
-  .trivia-card { padding: 24px; }
-  .page-dots { gap: 8px; }
-  .page-dot { width: 34px; height: 34px; font-size: 0.72rem; }
+@media (max-width: 700px) {
+  .three-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Photo grid */
@@ -574,10 +545,6 @@ footer .heart {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
-}
-
-.three-cards .page {
-  min-width: 0;
 }
 
 .photo-grid-container {
@@ -607,14 +574,21 @@ footer .heart {
   pointer-events: all;
 }
 
-.grid-item.unlocked .lock-overlay {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .lock-overlay .lock-icon {
   font-size: 36px;
   margin-bottom: 8px;
+}
+
+.confetti {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .trivia-card { padding: 24px; }
+  .page-dots { gap: 8px; }
+  .page-dot { width: 34px; height: 34px; font-size: 0.72rem; }
 }
 </style>
 </head>
@@ -647,8 +621,8 @@ footer .heart {
   <p class="progress-text" id="progressText">Unlock 0 of 0 memories</p>
 </div>
 
-<div style="text-align: center;">
-  <button onclick="clearAllProgress()" style="padding:10px 24px; background:transparent; border:2px solid var(--brown); border-radius:25px; font-family:'Fredoka'; font-weight:700; font-size:1rem; color:var(--brown); cursor:pointer; transition:all 0.2s;">Clear All Progress</button>
+<div style="text-align: center; margin: 20px 0;">
+  <button onclick="clearAllProgress()" style="padding:10px 24px; background:transparent; border:2px solid var(--brown); border-radius:25px; font-family:'Fredoka'; font-weight:700; font-size:1rem; color:var(--brown); cursor:pointer;">Clear All Progress</button>
 </div>
 
 <div class="trivia-backdrop" id="triviaBackdrop">
@@ -674,28 +648,16 @@ const spreads = [
     left: {
       title: "Flirtatiousness",
       description: "It started in Tennessee — I was at a wedding, she was still in Ohio. But something shifted. Messages got longer, calls got later, and suddenly we weren't just friends anymore.",
-      accent1: "#6B4E37",
-      accent2: "#C97B63",
-      date: "Early August",
-      tag: "Flirting",
-      trivia: {
-        question: "What state was Akshar in during the start of our flirtatiousness?",
-        options: ["Tennessee", "Ohio", "Texas", "Florida"],
-        correct: 0
-      }
+      accent1: "#6B4E37", accent2: "#C97B63",
+      date: "Early August", tag: "Flirting",
+      trivia: { question: "What state was Akshar in during the start of our flirtatiousness?", options: ["Tennessee", "Ohio", "Texas", "Florida"], correct: 0 }
     },
     right: {
       title: "Falling for You",
       description: "First time sleeping on FaceTime together. Didn't want to hang up. Fell asleep to each other's breathing. Long distance never felt so close.",
-      accent1: "#4A3728",
-      accent2: "#6B4E37",
-      date: "August 16, 2025",
-      tag: "First",
-      trivia: {
-        question: "What was the date we first slept on FaceTime?",
-        options: ["August 14", "August 16", "August 18", "August 20"],
-        correct: 1
-      }
+      accent1: "#4A3728", accent2: "#6B4E37",
+      date: "August 16, 2025", tag: "First",
+      trivia: { question: "What was the date we first slept on FaceTime?", options: ["August 14", "August 16", "August 18", "August 20"], correct: 1 }
     }
   },
   {
@@ -703,28 +665,16 @@ const spreads = [
     left: {
       title: "August 25: First Kiss",
       description: "First kiss — on FaceTime, because that's what we had. But it counted. It absolutely counted. Long distance couldn't stop this one.",
-      accent1: "#C97B63",
-      accent2: "#C4944A",
-      date: "August 25, 2025",
-      tag: "Milestone",
-      trivia: {
-        question: "How did we kiss for the first time?",
-        options: ["On FaceTime", "In person", "Through a letter", "In a dream"],
-        correct: 0
-      }
+      accent1: "#C97B63", accent2: "#C4944A",
+      date: "August 25, 2025", tag: "Milestone",
+      trivia: { question: "How did we kiss for the first time?", options: ["On FaceTime", "In person", "Through a letter", "In a dream"], correct: 0 }
     },
     right: {
       title: "More Soon",
       description: "Keep adding your memories to fill this page...",
-      accent1: "#C4944A",
-      accent2: "#8B7355",
-      date: "September 2025",
-      tag: "Soon",
-      trivia: {
-        question: "What month comes after August?",
-        options: ["September", "October", "November", "December"],
-        correct: 0
-      }
+      accent1: "#C4944A", accent2: "#8B7355",
+      date: "September 2025", tag: "Soon",
+      trivia: { question: "What month comes after August?", options: ["September", "October", "November", "December"], correct: 0 }
     }
   },
   {
@@ -732,28 +682,16 @@ const spreads = [
     left: {
       title: "September 16 😏",
       description: "She forgot her nighty and just crawled across the room to her camera on FaceTime. Completely naked. I couldn't look away.",
-      accent1: "#C97B63",
-      accent2: "#6B4E37",
-      date: "September 16, 2025",
-      tag: "Oops",
-      trivia: {
-        question: "What happened on September 16 during our FaceTime?",
-        options: ["She crawled across the room naked", "She gave a dance performance", "She fell asleep on camera", "She ordered food naked"],
-        correct: 0
-      }
+      accent1: "#C97B63", accent2: "#6B4E37",
+      date: "September 16, 2025", tag: "Oops",
+      trivia: { question: "What happened on September 16 during our FaceTime?", options: ["She crawled across the room naked", "She gave a dance performance", "She fell asleep on camera", "She ordered food naked"], correct: 0 }
     },
     right: {
       title: "September 18 — Akshar's First 'I Love You' ❤️",
       description: "First time I said 'I love you' to her. Three words that changed everything. Distance didn't matter anymore — this was real.",
-      accent1: "#C4944A",
-      accent2: "#C97B63",
-      date: "September 18, 2025",
-      tag: "Milestone",
-      trivia: {
-        question: "What date did Akshar first say 'I love you'?",
-        options: ["September 16", "September 18", "October 2", "October 17"],
-        correct: 1
-      }
+      accent1: "#C4944A", accent2: "#C97B63",
+      date: "September 18, 2025", tag: "Milestone",
+      trivia: { question: "What date did Akshar first say 'I love you'?", options: ["September 16", "September 18", "October 2", "October 17"], correct: 1 }
     }
   },
   {
@@ -761,28 +699,16 @@ const spreads = [
     left: {
       title: "Vaishnavi's First 'I Love You' ❤️",
       description: "The day she said 'I love you' for the first time. The words I'd been waiting to hear.",
-      accent1: "#C97B63",
-      accent2: "#C4944A",
-      date: "",
-      tag: "Milestone",
-      trivia: {
-        question: "What date did Vaishnavi first say 'I love you'?",
-        options: ["September 18", "October 2", "October 17", "November 27"],
-        correct: 1
-      }
+      accent1: "#C97B63", accent2: "#C4944A",
+      date: "October 2, 2025", tag: "Milestone",
+      trivia: { question: "What date did Vaishnavi first say 'I love you'?", options: ["September 18", "October 2", "October 17", "November 27"], correct: 1 }
     },
     right: {
       title: "October 17 — First Kiss 💋",
       description: "The day we had our actual first kiss. Not on FaceTime — for real.",
-      accent1: "#D4A853",
-      accent2: "#C97B63",
-      date: "October 17, 2025",
-      tag: "Firsts",
-      trivia: {
-        question: "What happened on October 17?",
-        options: ["First date", "Our actual first kiss 💋", "First trip together", "First time meeting family"],
-        correct: 1
-      }
+      accent1: "#D4A853", accent2: "#C97B63",
+      date: "October 17, 2025", tag: "Firsts",
+      trivia: { question: "What happened on October 17?", options: ["First date", "Our actual first kiss", "First trip together", "First time meeting family"], correct: 1 }
     }
   },
   {
@@ -790,15 +716,9 @@ const spreads = [
     left: {
       title: "Thankful for each other 🦃",
       description: "Our first ever Thanksgiving together. No turkey this year but we were just thankful for each other.",
-      accent1: "#C4944A",
-      accent2: "#C97B63",
-      date: "November 27, 2025",
-      tag: "First Thanksgiving",
-      trivia: {
-        question: "What occasion was it where we were thankful for each other?",
-        options: ["First Christmas 🎄", "First Thanksgiving 🦃", "First Halloween 🎃", "First New Year 🎆"],
-        correct: 1
-      }
+      accent1: "#C4944A", accent2: "#C97B63",
+      date: "November 27, 2025", tag: "First Thanksgiving",
+      trivia: { question: "What occasion was it where we were thankful for each other?", options: ["First Christmas", "First Thanksgiving", "First Halloween", "First New Year"], correct: 1 }
     },
     right: {
       type: "photogrid",
@@ -817,41 +737,23 @@ const spreads = [
       {
         title: "December 24 — Arrived in Ohio 🏠",
         description: "The first time I flew to Ohio. The start of living together. Best landing of my life.",
-        accent1: "#7BA69C",
-        accent2: "#C97B63",
-        date: "December 24, 2025",
-        tag: "First in Ohio",
-        trivia: {
-          question: "What happened on December 24?",
-          options: ["I flew to Ohio for the first time ✈️", "Our first Christmas together 🎄", "Our first date together 💕", "We met her parents 👨‍👩‍👧"],
-          correct: 0
-        }
+        accent1: "#7BA69C", accent2: "#C97B63",
+        date: "December 24, 2025", tag: "First in Ohio",
+        trivia: { question: "What happened on December 24?", options: ["I flew to Ohio for the first time", "Our first Christmas together", "Our first date together", "We met her parents"], correct: 0 }
       },
       {
         title: "December 25 — Our First Christmas 🎄",
         description: "Our first Christmas together. Spending the holidays side by side instead of on a screen.",
-        accent1: "#C97B63",
-        accent2: "#7BA69C",
-        date: "December 25, 2025",
-        tag: "First Christmas",
-        trivia: {
-          question: "What occasion did we celebrate on December 25?",
-          options: ["Thanksgiving 🦃", "New Year 🎆", "Christmas 🎄", "Valentine's ❤️"],
-          correct: 2
-        }
+        accent1: "#C97B63", accent2: "#7BA69C",
+        date: "December 25, 2025", tag: "First Christmas",
+        trivia: { question: "What occasion did we celebrate on December 25?", options: ["Thanksgiving", "New Year", "Christmas", "Valentine's"], correct: 2 }
       },
       {
         title: "December 26 — First Date Ever 🌹",
         description: "Our first real date, planned entirely by Vaishnavi. She made it perfect.",
-        accent1: "#D4A853",
-        accent2: "#C97B63",
-        date: "December 26, 2025",
-        tag: "First Date",
-        trivia: {
-          question: "What happened on December 26?",
-          options: ["First Christmas 🎄", "First meeting 🤝", "First date ever 🌹", "First movie 🎬"],
-          correct: 2
-        }
+        accent1: "#D4A853", accent2: "#C97B63",
+        date: "December 26, 2025", tag: "First Date",
+        trivia: { question: "What happened on December 26?", options: ["First Christmas", "First meeting", "First date ever", "First movie"], correct: 2 }
       }
     ]
   }
@@ -861,20 +763,16 @@ let currentPage = 0;
 const unlocked = new Set();
 
 function init() {
-  // Restore from localStorage
   const savedUnlocked = localStorage.getItem('start-unlocked');
   if (savedUnlocked) {
     JSON.parse(savedUnlocked).forEach(id => unlocked.add(id));
   }
   const savedPage = localStorage.getItem('start-currentPage');
-  if (savedPage) {
-    currentPage = parseInt(savedPage);
-  }
+  if (savedPage) currentPage = parseInt(savedPage);
   renderBook();
   renderDots();
   updateProgress();
   updateNav();
-  // Show saved page
   document.querySelectorAll('.spread').forEach(s => s.classList.remove('active'));
   const savedSpread = document.getElementById(`spread-${currentPage}`);
   if (savedSpread) savedSpread.classList.add('active');
@@ -886,7 +784,6 @@ function renderBook() {
   container.innerHTML = '';
   spreads.forEach((spread, i) => {
     if (spread.type === 'photogrid') {
-      // Full-width photo grid layout
       const div = document.createElement('div');
       div.className = `spread ${i === 0 ? 'active' : ''}`;
       div.id = `spread-${i}`;
@@ -900,16 +797,12 @@ function renderBook() {
       `;
       container.appendChild(div);
     } else if (spread.layout === 'three-cards') {
-      // Three-card layout (December)
       const div = document.createElement('div');
       div.className = `spread three-cards ${i === 0 ? 'active' : ''}`;
       div.id = `spread-${i}`;
-      div.innerHTML = `
-        ${spread.cards.map((card, ci) => renderPage(card, `card-${i}-${ci}`)).join('')}
-      `;
+      div.innerHTML = spread.cards.map((card, ci) => renderPage(card, `card-${i}-${ci}`)).join('');
       container.appendChild(div);
     } else if (spread.right && spread.right.type === 'photogrid') {
-      // Spread with left page + right photo grid
       const div = document.createElement('div');
       div.className = `spread ${i === 0 ? 'active' : ''}`;
       div.id = `spread-${i}`;
@@ -938,11 +831,34 @@ function renderBook() {
   });
 }
 
+function renderPage(page, id) {
+  const isUnlocked = unlocked.has(id);
+  return `
+    <div class="page ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
+      <div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>
+      <div class="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">Unlock this memory</div>
+        <div class="lock-hint">Answer a question about us</div>
+        <button class="unlock-btn" onclick="openTrivia('${id}')">Unlock Memory</button>
+      </div>
+      ${isUnlocked ? `
+        <div class="page-info">
+          <h3>${page.title}</h3>
+          <p>${page.description}</p>
+          <span class="page-date">${page.date}</span>
+          ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
 function renderGridItem(photo, spreadIdx, photoIdx) {
   const id = `grid-${spreadIdx}-${photoIdx}`;
   const isUnlocked = unlocked.has(id);
   return `
-    <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}" style="--accent1:${photo.accent1}; --accent2:${photo.accent2};">
+    <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       <div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>
       <div class="lock-overlay">
         <div class="lock-icon">🔒</div>
@@ -982,7 +898,7 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
           pageEl.classList.remove('locked');
           pageEl.classList.add('unlocked');
           const info = pageEl.querySelector('.page-info');
-          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p><button class="reset-btn" onclick="resetPage(\'' + id + '\', event)" style="display:block; margin-top:10px; padding:6px 16px; background:transparent; border:2px solid var(--brown); border-radius:20px; font-family:\'Fredoka\'; font-size:0.85rem; font-weight:600; color:var(--brown); cursor:pointer;">Reset</button>';
+          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p>';
         }
         updateProgress();
         fireConfetti();
@@ -1004,30 +920,6 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
   document.getElementById('triviaClose').style.display = 'none';
   document.getElementById('triviaTryAgain').style.display = 'none';
   document.getElementById('triviaBackdrop').classList.add('show');
-}
-
-function renderPage(page, id) {
-  const isUnlocked = unlocked.has(id);
-  return `
-    <div class="page ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
-      <div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};">
-      </div>
-      <div class="lock-overlay" id="lock-${id}">
-        <div class="lock-icon">🔒</div>
-        <div class="lock-text">Unlock this memory</div>
-        <div class="lock-hint">Answer a question about us</div>
-        <button class="unlock-btn" onclick="openTrivia('${id}')">Unlock Memory</button>
-      </div>
-      ${isUnlocked ? `
-        <div class="page-info">
-          <h3>${page.title}</h3>
-          <p>${page.description}</p>
-          <span class="page-date">${page.date}</span>
-          ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
-        </div>
-      ` : ''}
-    </div>
-  `;
 }
 
 function renderDots() {
@@ -1092,9 +984,24 @@ let currentTriviaId = null;
 
 function openTrivia(id) {
   currentTriviaId = id;
-  const spreadIdx = parseInt(id.split('-')[1]);
-  const side = id.split('-')[0];
-  const page = spreads[spreadIdx][side === 'left' ? 'left' : 'right'];
+  let page = null;
+  
+  if (id.startsWith('card-')) {
+    const parts = id.split('-');
+    const spreadIdx = parseInt(parts[1]);
+    const cardIdx = parseInt(parts[2]);
+    if (spreads[spreadIdx] && spreads[spreadIdx].cards && spreads[spreadIdx].cards[cardIdx]) {
+      page = spreads[spreadIdx].cards[cardIdx];
+    }
+  } else if (id.startsWith('left-') || id.startsWith('right-')) {
+    const spreadIdx = parseInt(id.split('-')[1]);
+    const side = id.split('-')[0];
+    if (spreads[spreadIdx]) {
+      page = spreads[spreadIdx][side === 'left' ? 'left' : 'right'];
+    }
+  }
+  
+  if (!page || !page.trivia) return;
 
   document.getElementById('triviaTitle').textContent = `🔒 ${page.title}`;
   document.getElementById('triviaQuestion').textContent = page.trivia.question;
@@ -1106,7 +1013,7 @@ function openTrivia(id) {
     const btn = document.createElement('button');
     btn.className = 'trivia-option';
     btn.textContent = opt;
-    btn.onclick = () => checkAnswer(btn, i, page.trivia.correct);
+    btn.onclick = () => checkAnswer(btn, i, page.trivia.correct, id);
     optsDiv.appendChild(btn);
   });
 
@@ -1121,7 +1028,6 @@ function openTrivia(id) {
 function tryAgain() {
   document.getElementById('triviaTryAgain').style.display = 'none';
   document.getElementById('triviaBackdrop').classList.remove('show');
-  // Check if it's a grid item or regular spread
   if (currentTriviaId && currentTriviaId.startsWith('grid-')) {
     const parts = currentTriviaId.split('-');
     const spreadIdx = parseInt(parts[1]);
@@ -1132,7 +1038,7 @@ function tryAgain() {
   }
 }
 
-function checkAnswer(btn, selected, correct) {
+function checkAnswer(btn, selected, correct, id) {
   const optsDiv = document.getElementById('triviaOptions');
   const allBtns = optsDiv.querySelectorAll('.trivia-option');
   allBtns.forEach(b => b.onclick = null);
@@ -1146,7 +1052,7 @@ function checkAnswer(btn, selected, correct) {
     document.getElementById('triviaResult').className = 'trivia-result success';
     document.getElementById('triviaClose').style.display = 'inline-block';
     document.getElementById('triviaTryAgain').style.display = 'none';
-    unlockPage(currentTriviaId);
+    unlockPage(id);
     fireConfetti();
     imgDiv.innerHTML = `<div style="font-size:4rem;">🎉</div><div style="font-size:0.85rem; color:var(--brown-medium); margin-top:4px;">Celebration picture coming soon!</div>`;
   } else {
@@ -1166,22 +1072,39 @@ function unlockPage(id) {
   if (pageEl) {
     pageEl.classList.remove('locked');
     pageEl.classList.add('unlocked');
-    const spreadIdx = parseInt(id.split('-')[1]);
-    const side = id.split('-')[0];
-    const page = spreads[spreadIdx][side === 'left' ? 'left' : 'right'];
-    const infoDiv = document.createElement('div');
-    infoDiv.className = 'page-info';
-    infoDiv.innerHTML = `
-      <h3>${page.title}</h3>
-      <p>${page.description}</p>
-      <span class="page-date">${page.date}</span>
-      ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
-      <button class="reset-btn" onclick="resetPage('${id}', event)" style="display:block; margin-top:10px; padding:6px 16px; background:transparent; border:2px solid var(--brown); border-radius:20px; font-family:'Fredoka'; font-size:0.85rem; font-weight:600; color:var(--brown); cursor:pointer;">Reset</button>
-    `;
-    pageEl.appendChild(infoDiv);
+    let page = null;
+    if (id.startsWith('card-')) {
+      const parts = id.split('-');
+      const spreadIdx = parseInt(parts[1]);
+      const cardIdx = parseInt(parts[2]);
+      if (spreads[spreadIdx] && spreads[spreadIdx].cards && spreads[spreadIdx].cards[cardIdx]) {
+        page = spreads[spreadIdx].cards[cardIdx];
+      }
+    } else if (id.startsWith('left-') || id.startsWith('right-')) {
+      const spreadIdx = parseInt(id.split('-')[1]);
+      const side = id.split('-')[0];
+      if (spreads[spreadIdx]) {
+        page = spreads[spreadIdx][side === 'left' ? 'left' : 'right'];
+      }
+    }
+    if (page) {
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'page-info';
+      infoDiv.innerHTML = `
+        <h3>${page.title}</h3>
+        <p>${page.description}</p>
+        <span class="page-date">${page.date}</span>
+        ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
+      `;
+      pageEl.appendChild(infoDiv);
+    }
   }
   updateProgress();
   updateDots();
+}
+
+function closeTrivia() {
+  document.getElementById('triviaBackdrop').classList.remove('show');
 }
 
 function clearAllProgress() {
@@ -1192,26 +1115,6 @@ function clearAllProgress() {
     currentPage = 0;
     init();
   }
-}
-
-function resetPage(id, event) {
-  if (event) event.stopPropagation();
-  unlocked.delete(id);
-  localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
-  const pageEl = document.getElementById(`page-${id}`);
-  if (pageEl) {
-    pageEl.classList.remove('unlocked');
-    pageEl.classList.add('locked');
-    // Remove old page-info
-    const oldInfo = pageEl.querySelector('.page-info');
-    if (oldInfo) oldInfo.remove();
-  }
-  updateProgress();
-  updateDots();
-}
-
-function closeTrivia() {
-  document.getElementById('triviaBackdrop').classList.remove('show');
 }
 
 function fireConfetti() {
