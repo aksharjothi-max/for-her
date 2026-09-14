@@ -611,7 +611,7 @@ footer .heart {
 
 <div class="nav-controls">
   <button class="nav-btn prev" id="prevBtn" onclick="navigate(-1)">◀ Prev</button>
-  <button class="nav-btn next" id="nextBtn" onclick="navigate(1)">Next ▶</button>
+  <button class="nav-btn next" id="nextBtn" onclick="nextAction()">Next ▶</button>
 </div>
 
 <div class="progress-section">
@@ -647,14 +647,14 @@ const spreads = [
     month: "August",
     left: {
       title: "Flirtatiousness",
-      description: "It started in Tennessee — I was at a wedding, you were still in Ohio. But something shifted. Messages got longer, calls got later, and suddenly we weren't just friends anymore.",
+      description: "I was in Tennessee, we were closer than ever. The wedding vibes started to get to me and that caused a shift. Our messages got flirtier, texts became more important, and suddenly we weren't just friends anymore.",
       accent1: "#6B4E37", accent2: "#C97B63",
       date: "August 2025", tag: "Flirting",
       trivia: { question: "What state was Akshar in during the start of our flirtatiousness?", options: ["Tennessee", "Ohio", "Texas", "Florida"], correct: 0 }
     },
     right: {
       title: "Falling for Each Other",
-      description: "First time sleeping on FaceTime together. Didn't want to hang up. Fell asleep to each other's breathing. Long distance never felt so close.",
+      description: "First time sleeping on FaceTime together. I didn't want to hang up and faked being asleep, and you just stayed. Never felt closer to each other than that night.",
       accent1: "#4A3728", accent2: "#6B4E37",
       date: "August 16, 2025", tag: "First",
       trivia: { question: "What was the date we first slept on FaceTime?", options: ["August 14", "August 16", "August 18", "August 20"], correct: 1 }
@@ -664,14 +664,14 @@ const spreads = [
     month: "September",
     left: {
       title: "September 16 😏",
-      description: "You forgot your nighty and just crawled across the room to your camera on FaceTime. Completely naked. I couldn't look away.",
+      description: "Fresh out the shower, forgot I was sitting there on FaceTime still. Walked out the bathroom butt ass naked and showed me everything on FaceTime. Then you ever so elegantly crawled to the laptop to hide your beautiful body.",
       accent1: "#C97B63", accent2: "#6B4E37",
       date: "September 16, 2025", tag: "Oops",
       trivia: { question: "What happened on September 16 during our FaceTime?", options: ["You crawled across the room naked", "You gave a dance performance", "You fell asleep on camera", "You ordered food naked"], correct: 0 }
     },
     right: {
       title: "Akshars First 'I Love You' ❤️",
-      description: "First time I said 'I love you' to her. Three words that changed everything. Distance didn't matter anymore — this was real.",
+      description: "First time I said \"I love you\" to you. Three words that changed everything for me. Distance can keep us apart but not my feelings for you.",
       accent1: "#C4944A", accent2: "#C97B63",
       date: "September 18, 2025", tag: "Milestone",
       trivia: { question: "What date did Akshar first say 'I love you'?", options: ["September 16", "September 18", "September 20", "September 25"], correct: 1 }
@@ -681,14 +681,14 @@ const spreads = [
     month: "October",
     left: {
       title: "Your First 'I Love You' ❤️",
-      description: "The day you said 'I love you' for the first time. The words I'd been waiting to hear.",
+      description: "The day you said \"I love you\" for the first time. The words you finally decided to say back after two long weeks. Like to keep me waiting huh...",
       accent1: "#C97B63", accent2: "#C4944A",
       date: "October 2, 2025", tag: "Milestone",
       trivia: { question: "What date did you first say 'I love you'?", options: ["October 2", "October 5", "October 10", "October 17"], correct: 0 }
     },
     right: {
       title: "Our First Kiss 💋",
-      description: "The day we had our actual first kiss. Not on FaceTime — for real.",
+      description: "The day we kissed each other for the first time. Kisses on FaceTime never felt enough after this.",
       accent1: "#D4A853", accent2: "#C97B63",
       date: "October 17, 2025", tag: "Firsts",
       trivia: { question: "What date was our first kiss?", options: ["October 10", "October 12", "October 17", "October 20"], correct: 2 }
@@ -719,7 +719,7 @@ const spreads = [
     cards: [
       {
         title: "Akshars Arrival to John Glenn ✈️",
-        description: "The first time I flew into John Glenn Columbus airport. She picked me up from the terminal — that hug was everything.",
+        description: "My first trip to Columbus, Ohio. The name John Glenn holds a special place in our relationship. You picked me up from the terminal and I never thought seeing that Ugly Yellow Hoodie would bring me such happiness.",
         accent1: "#7BA69C", accent2: "#C97B63",
         date: "December 24, 2025", tag: "Arrival",
         trivia: { question: "What date did Akshar arrive at John Glenn Columbus?", options: ["December 22", "December 23", "December 24", "December 26"], correct: 2 }
@@ -733,7 +733,7 @@ const spreads = [
       },
       {
         title: "Our First Date Ever 🌹",
-        description: "Started off walking around downtown tryna find coffee, ended up with a rooftop dinner at Astra. Planned entirely by you — you nailed it.",
+        description: "The first date planned by you, started off extremely unplanned due to everything being closed but somehow that made it better. And then the starry finish at Astra with some good ass Lobster Mac.",
         accent1: "#D4A853", accent2: "#C97B63",
         date: "December 26, 2025", tag: "First Date",
         trivia: { question: "What color dress did you wear on our first date?", options: ["Brown 🤎", "Black 🖤", "White 🤍", "Red ❤️"], correct: 0 }
@@ -931,6 +931,15 @@ function navigate(dir) {
     updateDots();
     updateNav();
     localStorage.setItem('start-currentPage', currentPage);
+  }
+}
+
+function nextAction() {
+  // If we're on the last spread, go to home page
+  if (currentPage >= spreads.length - 1) {
+    window.location.href = '../';
+  } else {
+    navigate(1);
   }
 }
 
