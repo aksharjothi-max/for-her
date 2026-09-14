@@ -562,6 +562,45 @@ footer .heart {
   .page-dots { gap: 8px; }
   .page-dot { width: 34px; height: 34px; font-size: 0.72rem; }
 }
+
+/* Photo grid */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  grid-column: 1 / -1;
+}
+
+.grid-item {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(44,24,16,0.08);
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  border: 4px solid transparent;
+  cursor: pointer;
+}
+
+.grid-item:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  border-color: var(--caramel);
+}
+
+.grid-item.locked .lock-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.grid-item.unlocked .lock-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lock-overlay .lock-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
 </style>
 </head>
 <body>
@@ -733,32 +772,15 @@ const spreads = [
   },
   {
     month: "November",
-    left: {
-      title: "November 2025 🦃",
-      description: "Coming soon...",
-      accent1: "#C4944A",
-      accent2: "#C97B63",
-      date: "November 2025",
-      tag: "Coming Soon",
-      trivia: {
-        question: "What holiday is in November?",
-        options: ["Halloween", "Thanksgiving", "Christmas", "Valentine's"],
-        correct: 1
-      }
-    },
-    right: {
-      title: "More Memories",
-      description: "Coming soon...",
-      accent1: "#8B7355",
-      accent2: "#6B4E37",
-      date: "November 2025",
-      tag: "Coming Soon",
-      trivia: {
-        question: "What month comes after October?",
-        options: ["September", "November", "December", "January"],
-        correct: 1
-      }
-    }
+    type: "photogrid",
+    description: "Nothing insane happened in november but we still have all these memories to account for us this month.",
+    photos: [
+      { accent1: "#C4944A", accent2: "#C97B63", trivia: { question: "What is my favorite color?", options: ["Brown", "Blue", "Green", "Red"], correct: 0 } },
+      { accent1: "#C97B63", accent2: "#D4A853", trivia: { question: "What state do I live in?", options: ["Texas", "Ohio", "Tennessee", "Florida"], correct: 0 } },
+      { accent1: "#8B7355", accent2: "#C4944A", trivia: { question: "What do I study?", options: ["Business Analytics & AI", "Computer Science", "Finance", "Engineering"], correct: 0 } },
+      { accent1: "#D4A853", accent2: "#C97B63", trivia: { question: "What is my go-to coffee order?", options: ["Iced caramel macchiato", "Black coffee", "Vanilla latte", "Matcha"], correct: 0 } },
+      { accent1: "#7BA69C", accent2: "#8B7355", trivia: { question: "What internship did I have in 2025?", options: ["Fidelity Investments", "Goldman Sachs", "JP Morgan", "Deloitte"], correct: 0 } }
+    ]
   },
   {
     month: "December",
@@ -819,15 +841,99 @@ function renderBook() {
   const container = document.getElementById('bookContainer');
   container.innerHTML = '';
   spreads.forEach((spread, i) => {
-    const div = document.createElement('div');
-    div.className = `spread ${i === 0 ? 'active' : ''}`;
-    div.id = `spread-${i}`;
-    div.innerHTML = `
-      ${renderPage(spread.left, `left-${i}`)}
-      ${renderPage(spread.right, `right-${i}`)}
-    `;
-    container.appendChild(div);
+    if (spread.type === 'photogrid') {
+      // Photo grid layout
+      const div = document.createElement('div');
+      div.className = `spread ${i === 0 ? 'active' : ''}`;
+      div.id = `spread-${i}`;
+      div.innerHTML = `
+        <div class="photo-grid-desc" style="grid-column:1/-1; text-align:center; padding:20px; font-size:1rem; color:var(--brown-medium); font-weight:600;">
+          ${spread.description}
+        </div>
+        <div class="photo-grid">
+          ${spread.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
+        </div>
+      `;
+      container.appendChild(div);
+    } else {
+      const div = document.createElement('div');
+      div.className = `spread ${i === 0 ? 'active' : ''}`;
+      div.id = `spread-${i}`;
+      div.innerHTML = `
+        ${renderPage(spread.left, `left-${i}`)}
+        ${renderPage(spread.right, `right-${i}`)}
+      `;
+      container.appendChild(div);
+    }
   });
+}
+
+function renderGridItem(photo, spreadIdx, photoIdx) {
+  const id = `grid-${spreadIdx}-${photoIdx}`;
+  const isUnlocked = unlocked.has(id);
+  return `
+    <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}" style="--accent1:${photo.accent1}; --accent2:${photo.accent2};">
+      <div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>
+      <div class="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
+      </div>
+      ${isUnlocked ? `<div class="page-info" style="padding:10px;"><p style="font-size:0.85rem; color:#666;">Memory unlocked!</p></div>` : ''}
+    </div>
+  `;
+}
+
+function openGridTrivia(id, spreadIdx, photoIdx) {
+  const photo = spreads[spreadIdx].photos[photoIdx];
+  currentTriviaId = id;
+  document.getElementById('triviaTitle').textContent = '🔒 Memory Lock';
+  document.getElementById('triviaQuestion').textContent = photo.trivia.question;
+  const optsDiv = document.getElementById('triviaOptions');
+  optsDiv.innerHTML = '';
+  photo.trivia.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'trivia-option';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      const allBtns = optsDiv.querySelectorAll('.trivia-option');
+      allBtns.forEach(b => b.onclick = null);
+      const imgDiv = document.getElementById('triviaImage');
+      imgDiv.style.display = 'block';
+      if (i === photo.trivia.correct) {
+        btn.classList.add('correct');
+        document.getElementById('triviaResult').textContent = '🎉 Perfect! Memory unlocked!';
+        document.getElementById('triviaResult').className = 'trivia-result success';
+        document.getElementById('triviaClose').style.display = 'inline-block';
+        document.getElementById('triviaTryAgain').style.display = 'none';
+        unlocked.add(id);
+        localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
+        const pageEl = document.getElementById(`page-${id}`);
+        if (pageEl) {
+          pageEl.classList.remove('locked');
+          pageEl.classList.add('unlocked');
+          const info = pageEl.querySelector('.page-info');
+          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p>';
+        }
+        updateProgress();
+        fireConfetti();
+        imgDiv.innerHTML = '<div style="font-size:4rem;">🎉</div>';
+      } else {
+        btn.classList.add('wrong');
+        document.getElementById('triviaResult').textContent = 'Try again 😢';
+        document.getElementById('triviaResult').className = 'trivia-result fail';
+        document.getElementById('triviaClose').style.display = 'none';
+        document.getElementById('triviaTryAgain').style.display = 'inline-block';
+        imgDiv.innerHTML = '<div style="font-size:4rem;">😢</div>';
+      }
+    };
+    optsDiv.appendChild(btn);
+  });
+  document.getElementById('triviaResult').textContent = '';
+  document.getElementById('triviaResult').className = 'trivia-result';
+  document.getElementById('triviaImage').style.display = 'none';
+  document.getElementById('triviaClose').style.display = 'none';
+  document.getElementById('triviaTryAgain').style.display = 'none';
+  document.getElementById('triviaBackdrop').classList.add('show');
 }
 
 function renderPage(page, id) {
