@@ -631,6 +631,7 @@ footer .heart {
     <div class="trivia-result" id="triviaResult"></div>
     <div id="triviaImage" style="text-align:center; margin-top:12px; display:none;"></div>
     <button class="trivia-close" id="triviaClose" style="display:none;" onclick="closeTrivia()">Continue</button>
+    <button class="trivia-close" id="triviaTryAgain" style="display:none;" onclick="tryAgain()">Try Again</button>
   </div>
 </div>
 
@@ -954,11 +955,10 @@ function checkAnswer(btn, selected, correct) {
     imgDiv.innerHTML = `<div style="font-size:4rem;">🎉</div><div style="font-size:0.85rem; color:var(--brown-medium); margin-top:4px;">Celebration picture coming soon!</div>`;
   } else {
     btn.classList.add('wrong');
-    allBtns[correct].classList.add('correct');
-    document.getElementById('triviaResult').textContent = 'Close enough — unlocked because I love you';
+    document.getElementById('triviaResult').textContent = 'Try again 😢';
     document.getElementById('triviaResult').className = 'trivia-result fail';
-    document.getElementById('triviaClose').style.display = 'inline-block';
-    unlockPage(currentTriviaId);
+    document.getElementById('triviaClose').style.display = 'none';
+    document.getElementById('triviaTryAgain').style.display = 'inline-block';
     imgDiv.innerHTML = `<div style="font-size:4rem;">😢</div><div style="font-size:0.85rem; color:var(--brown-medium); margin-top:4px;">Sad picture coming soon!</div>`;
   }
 }
@@ -984,6 +984,11 @@ function unlockPage(id) {
   }
   updateProgress();
   updateDots();
+}
+
+function tryAgain() {
+  document.getElementById('triviaTryAgain').style.display = 'none';
+  openTrivia(currentTriviaId);
 }
 
 function closeTrivia() {
