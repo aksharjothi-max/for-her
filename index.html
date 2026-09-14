@@ -233,6 +233,23 @@ header p {
   border: 1px solid var(--sand);
 }
 
+/* Section wrapper */
+.section-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Section description above card */
+.section-desc {
+  font-size: 0.95rem;
+  color: var(--brown-medium);
+  margin-bottom: 12px;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
 /* Footer */
 footer {
   text-align: center;
@@ -371,14 +388,26 @@ sections.forEach((s, i) => {
     card.onclick = (e) => e.preventDefault();
   }
 
+  // Create section wrapper
+  const sectionDiv = document.createElement('div');
+  sectionDiv.className = 'section-wrapper';
+  sectionDiv.style.animation = `fadeInUp 0.5s ease ${0.2 * i}s backwards`;
+
+  // Add description above card
+  const descDiv = document.createElement('p');
+  descDiv.className = 'section-desc';
+  descDiv.textContent = s.desc;
+  sectionDiv.appendChild(descDiv);
+
+  // Add card
   card.innerHTML = `
     <span class="card-emoji">${s.emoji}</span>
     <h3 class="card-title">${s.title}</h3>
-    <p class="card-desc">${s.desc}</p>
     <span class="card-badge ${s.locked ? (s.badge === 'COMING SOON' ? 'coming' : 'locked-badge') : 'live'}">${s.badge}</span>
   `;
+  sectionDiv.appendChild(card);
 
-  container.appendChild(card);
+  container.appendChild(sectionDiv);
 });
 </script>
 
