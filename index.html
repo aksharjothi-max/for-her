@@ -28,63 +28,28 @@
 
 body {
   font-family: 'Fredoka', sans-serif;
-  background: linear-gradient(135deg, var(--brown-dark) 0%, #3D251A 30%, var(--brown) 60%, #3D251A 100%);
+  background: linear-gradient(135deg, var(--beige) 0%, var(--cream) 40%, var(--sand) 100%);
   min-height: 100vh;
-  color: var(--cream);
+  color: var(--ink);
   overflow-x: hidden;
 }
 
-/* Animated background orbs */
-.orb {
+/* Subtle background pattern */
+body::before {
+  content: '';
   position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.25;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(196,148,74,0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(201,123,99,0.08) 0%, transparent 50%);
   z-index: 0;
   pointer-events: none;
-}
-
-.orb-1 {
-  width: 400px; height: 400px;
-  background: var(--terracotta);
-  top: -100px; left: -100px;
-  animation: orbFloat1 12s ease-in-out infinite;
-}
-
-.orb-2 {
-  width: 350px; height: 350px;
-  background: var(--brown-light);
-  bottom: -100px; right: -100px;
-  animation: orbFloat2 15s ease-in-out infinite;
-}
-
-.orb-3 {
-  width: 250px; height: 250px;
-  background: var(--golden);
-  top: 40%; left: 60%;
-  animation: orbFloat3 10s ease-in-out infinite;
-}
-
-@keyframes orbFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(80px, 60px) scale(1.1); }
-}
-
-@keyframes orbFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-60px, -80px) scale(1.15); }
-}
-
-@keyframes orbFloat3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(50px, -50px) scale(0.9); }
 }
 
 /* Floating particles */
 .particle {
   position: fixed;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: var(--caramel);
   border-radius: 50%;
   opacity: 0;
@@ -95,8 +60,8 @@ body {
 
 @keyframes particleFloat {
   0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.5; }
-  90% { opacity: 0.5; }
+  10% { opacity: 0.35; }
+  90% { opacity: 0.35; }
   100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
@@ -111,8 +76,8 @@ header {
 header h1 {
   font-family: 'Caveat', cursive;
   font-size: clamp(3rem, 7vw, 5rem);
-  color: var(--caramel);
-  text-shadow: 4px 4px 0 var(--golden), 0 0 40px rgba(196,148,74,0.3);
+  color: var(--brown);
+  text-shadow: 4px 4px 0 var(--caramel), 0 0 40px rgba(196,148,74,0.2);
   animation: titleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -123,7 +88,7 @@ header h1 {
 
 header p {
   font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: rgba(255,248,240,0.7);
+  color: var(--brown-medium);
   margin-top: 16px;
   opacity: 0;
   animation: fadeInUp 0.6s ease 0.4s forwards;
@@ -162,9 +127,8 @@ header p {
 
 /* Section card */
 .section-card {
-  background: rgba(255,248,240,0.05);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,248,240,0.1);
+  background: var(--white);
+  border: 2px solid var(--beige-dark);
   border-radius: 24px;
   padding: 40px 30px;
   text-align: center;
@@ -187,24 +151,24 @@ header p {
 }
 
 .section-card:hover::before {
-  opacity: 0.08;
+  opacity: 0.06;
 }
 
 .section-card:hover {
   transform: translateY(-8px);
   border-color: var(--card-accent, var(--caramel));
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px var(--card-glow, rgba(196,148,74,0.15));
+  box-shadow: 0 20px 60px rgba(44,24,16,0.12), 0 0 40px var(--card-glow, rgba(196,148,74,0.15));
 }
 
 .section-card.locked {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .section-card.locked:hover {
   transform: none;
   box-shadow: none;
-  border-color: rgba(255,248,240,0.1);
+  border-color: var(--beige-dark);
 }
 
 .card-emoji {
@@ -227,14 +191,14 @@ header p {
   font-family: 'Caveat', cursive;
   font-size: 2rem;
   margin-bottom: 8px;
-  color: var(--card-accent, var(--caramel));
+  color: var(--card-accent, var(--brown));
   position: relative;
   z-index: 1;
 }
 
 .card-desc {
   font-size: 0.95rem;
-  color: rgba(255,248,240,0.7);
+  color: var(--brown-medium);
   line-height: 1.5;
   position: relative;
   z-index: 1;
@@ -259,14 +223,14 @@ header p {
 
 .card-badge.coming {
   background: rgba(196,148,74,0.2);
-  color: var(--caramel);
+  color: var(--brown-medium);
   border: 1px solid var(--caramel);
 }
 
 .card-badge.locked-badge {
-  background: rgba(255,248,240,0.1);
-  color: rgba(255,248,240,0.5);
-  border: 1px solid rgba(255,248,240,0.2);
+  background: var(--beige-dark);
+  color: var(--brown-light);
+  border: 1px solid var(--sand);
 }
 
 /* Footer */
@@ -280,12 +244,12 @@ footer {
 footer p {
   font-family: 'Caveat', cursive;
   font-size: 1.4rem;
-  color: var(--caramel);
+  color: var(--brown);
 }
 
 footer .sub {
   font-size: 0.85rem;
-  color: rgba(255,248,240,0.4);
+  color: var(--brown-light);
   margin-top: 6px;
 }
 
@@ -331,10 +295,6 @@ footer .sub {
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
 <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
 <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
 <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
@@ -358,8 +318,8 @@ footer .sub {
 
 <div class="wave">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-    <path d="M0,30 C150,50 350,10 500,30 C650,50 850,10 1000,30 C1150,50 1200,30 1200,30 L1200,60 L0,60 Z" fill="rgba(212,184,150,0.3)"/>
-    <path d="M0,40 C150,20 350,50 500,40 C650,20 850,50 1000,40 C1150,20 1200,40 1200,40 L1200,60 L0,60 Z" fill="rgba(212,184,150,0.15)"/>
+    <path d="M0,30 C150,50 350,10 500,30 C650,50 850,10 1000,30 C1150,50 1200,30 1200,30 L1200,60 L0,60 Z" fill="rgba(212,184,150,0.35)"/>
+    <path d="M0,40 C150,20 350,50 500,40 C650,20 850,50 1000,40 C1150,20 1200,40 1200,40 L1200,60 L0,60 Z" fill="rgba(212,184,150,0.18)"/>
   </svg>
 </div>
 
