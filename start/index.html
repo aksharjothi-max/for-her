@@ -214,6 +214,11 @@ header .subtitle {
   padding: 20px;
 }
 
+.page.unlocked .lock-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .page.locked .lock-overlay {
   opacity: 1;
   pointer-events: all;
@@ -872,15 +877,19 @@ function renderPage(page, id) {
   } else {
     imgHtml = `<div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>`;
   }
+  const lockHtml = !isUnlocked ? `
+    <div class="lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-text">Unlock this memory</div>
+      <div class="lock-hint">Answer a question about us</div>
+      <button class="unlock-btn" onclick="openTrivia('${id}')">Unlock Memory</button>
+    </div>
+  ` : '';
+
   return `
     <div class="page ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       ${imgHtml}
-      <div class="lock-overlay">
-        <div class="lock-icon">🔒</div>
-        <div class="lock-text">Unlock this memory</div>
-        <div class="lock-hint">Answer a question about us</div>
-        <button class="unlock-btn" onclick="openTrivia('${id}')">Unlock Memory</button>
-      </div>
+      ${lockHtml}
       ${isUnlocked ? `
         <div class="page-info">
           <h3>${page.title}</h3>
@@ -912,20 +921,27 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
        </div>`
     : '';
   
+  // Lock overlay only shown when locked
+  const lockHtml = !isUnlocked ? `
+    <div class="lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
+    </div>
+  ` : '';
+
   return `
     <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       ${imgHtml}
-      <div class="lock-overlay">
-        <div class="lock-icon">🔒</div>
-        <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
-      </div>
+      ${lockHtml}
       ${infoHtml}
     </div>
   `;
 }
 
 function openGridTrivia(id, spreadIdx, photoIdx) {
-  const photo = spreads[spreadIdx].photos[photoIdx];
+  const spread = spreads[spreadIdx];
+  const photos = spread.photos || (spread.right && spread.right.photos) || [];
+  const photo = photos[photoIdx];
   if (!photo || !photo.trivia) return;
   
   currentTriviaId = id;
