@@ -196,35 +196,51 @@ header .subtitle {
   min-height: 400px;
 }
 
+.page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.page .lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(74,55,40,0.95), rgba(107,78,55,0.92), rgba(139,115,85,0.92));
+  z-index: 10;
+}
+
+.page.unlocked .lock-overlay {
+  display: none !important;
+}
+
+.page.locked .lock-overlay {
+  display: flex !important;
+}
+
+.page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.page.locked 
+
 .page:hover {
   transform: translateY(-5px) rotate(-1deg);
   border-color: var(--caramel);
 }
 
-.lock-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(74,55,40,0.95), rgba(107,78,55,0.92), rgba(139,115,85,0.92));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  border-radius: 14px;
-  padding: 20px;
-}
 
-.page.unlocked .lock-overlay {
-  opacity: 0;
-  pointer-events: none;
-}
 
-.page.locked .lock-overlay {
-  opacity: 1;
-  pointer-events: all;
-}
+.page.unlocked 
+
+.page.locked 
 
 .lock-icon {
   font-size: 64px;
@@ -575,28 +591,11 @@ footer .heart {
   border-color: var(--caramel);
 }
 
-.grid-item.locked .lock-overlay {
-  opacity: 1;
-  pointer-events: all;
-}
+.grid-item.locked 
 
-.grid-item.unlocked .lock-overlay {
-  opacity: 0;
-  pointer-events: none;
-}
+.grid-item.unlocked 
 
-.lock-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(74,55,40,0.95), rgba(107,78,55,0.92), rgba(139,115,85,0.92));
-  border-radius: 16px;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-}
+
 
 .grid-item.locked .lock-icon {
   font-size: 36px;
@@ -869,17 +868,11 @@ function renderPage(page, id) {
   if (hasImage && isUnlocked) {
     if (hasImage.endsWith('.mp4') || hasImage.endsWith('.mov') || hasImage.includes('video')) {
       imgHtml = `<video src="${hasImage}" style="width:100%; display:block;" controls></video>`;
-    } else if (hasImage.startsWith('data:')) {
-      if (hasImage.includes('video')) {
-        imgHtml = `<video src="${hasImage}" style="width:100%; display:block;" controls></video>`;
-      } else {
-        imgHtml = `<img src="${hasImage}" style="width:100%; display:block;" />`;
-      }
     } else {
       imgHtml = `<img src="${hasImage}" style="width:100%; display:block;" />`;
     }
   } else if (!isUnlocked) {
-    imgHtml = `<div style="width:100%; height:100%; background:transparent;"></div>`;
+    imgHtml = `<div style="width:100%; height:100%;"></div>`;
   } else {
     imgHtml = `<div class="placeholder-img" style="--accent1: ${page.accent1}; --accent2: ${page.accent2};"></div>`;
   }
