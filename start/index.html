@@ -145,11 +145,11 @@ header p {
   object-fit: cover;
 }
 
-/* Lock Overlay */
+/* Lock Overlay - Consolidated */
 .lock-overlay {
   position: absolute;
   inset: 0;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -157,12 +157,14 @@ header p {
   z-index: 10;
 }
 
-.unlocked .lock-overlay {
-  display: none !important;
+.page.locked .lock-overlay,
+.grid-item.locked .lock-overlay {
+  display: flex;
 }
 
-.locked .lock-overlay {
-  display: flex !important;
+.page.unlocked .lock-overlay,
+.grid-item.unlocked .lock-overlay {
+  display: none;
 }
 
 .lock-icon {
@@ -422,8 +424,8 @@ footer p {
     <p class="question" id="triviaQuestion"></p>
     <div class="trivia-options" id="triviaOptions"></div>
     <div class="trivia-result" id="triviaResult"></div>
-    <button class="trivia-close" id="triviaClose" style="display:none;">Continue</button>
-    <button class="trivia-close" id="triviaTryAgain" style="display:none;">Try Again</button>
+    <button class="trivia-close" id="triviaClose" style="display:none;" onclick="closeTrivia()">Continue</button>
+    <button class="trivia-close" id="triviaTryAgain" style="display:none;" onclick="tryAgain()">Try Again</button>
   </div>
 </div>
 
@@ -465,9 +467,10 @@ const spreads = [
     },
     right: {
       title: "Akshar's First 'I Love You' ❤️",
-      description: "First time I said 'I love you' to you. Three words that changed everything for me. Distance can keep us apart but not my feelings for you.",
+      description: "First time I said 'I love you' to you. Three words that changed everything for me.",
       image: "./images/image_3.jpg",
       accent1: "#D4A853", accent2: "#C97B63",
+      date: "September 18, 2025", tag: "First ILY",
       trivia: { question: "What date did Akshar first say 'I love you'?", options: ["September 16", "September 18", "September 20", "September 22"], correct: 1 }
     }
   },
@@ -478,6 +481,7 @@ const spreads = [
       description: "The day you said 'I love you' for the first time. The words you finally decided to say back after two long weeks.",
       image: "./images/image_4.jpg",
       accent1: "#D4A853", accent2: "#C97B63",
+      date: "October 2, 2025", tag: "Your Turn",
       trivia: { question: "What date did you first say 'I love you'?", options: ["October 2", "October 5", "October 10", "October 17"], correct: 0 }
     },
     right: {
@@ -548,7 +552,7 @@ const spreads = [
         image: "./images/image_11.jpg",
         accent1: "#D4A853", accent2: "#C97B63",
         date: "December 26, 2025", tag: "First Date",
-        trivia: { question: "What color dress did you wear on our first date?", options: ["Brown 🤎", "Black 🖤", "White 🤍", "Red ❤️"], correct: 0 }
+        trivia: { question: "What color dress did you wear on our first date?", options: ["Brown", "Black", "White", "Red"], correct: 0 }
       }
     ]
   }
@@ -557,21 +561,6 @@ const spreads = [
 // State
 let currentPage = 0;
 const unlocked = new Set();
-
-// DOM Elements
-const bookContainer = document.getElementById('bookContainer');
-const monthBar = document.getElementById('monthBar');
-const progressFill = document.getElementById('progressFill');
-const progressText = document.getElementById('progressText');
-const triviaBackdrop = document.getElementById('triviaBackdrop');
-const triviaOptions = document.getElementById('triviaOptions');
-const triviaResult = document.getElementById('triviaResult');
-const triviaClose = document.getElementById('triviaClose');
-const triviaTryAgain = document.getElementById('triviaTryAgain');
-const btnPrev = document.getElementById('btnPrev');
-const btnNext = document.getElementById('btnNext');
-
-let currentTriviaId = null;
 
 // Initialize
 function init() {
@@ -588,6 +577,7 @@ function init() {
 
 // Render month buttons
 function renderMonthBar() {
+  const monthBar = document.getElementById('monthBar');
   monthBar.innerHTML = '';
   spreads.forEach((spread, i) => {
     const btn = document.createElement('button');
@@ -600,7 +590,8 @@ function renderMonthBar() {
 
 // Render book
 function renderBook() {
-  bookContainer.innerHTML = '';
+  const container = document.getElementById('bookContainer');
+  container.innerHTML = '';
   spreads.forEach((spread, i) => {
     const div = document.createElement('div');
     div.className = `spread ${i === currentPage ? 'active' : ''}`;
@@ -608,7 +599,7 @@ function renderBook() {
     
     if (spread.type === 'photogrid') {
       div.innerHTML = `
-        <div class="photo-grid-desc" style="grid-column:1/-1; text-align:center; padding:20px; font-size:1rem; color:var(--brown-medium); font-weight:600;">
+        <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:1rem; color:var(--brown-medium); font-weight:600;">
           ${spread.description}
         </div>
         <div class="photo-grid">
@@ -620,13 +611,11 @@ function renderBook() {
     } else if (spread.right && spread.right.type === 'photogrid') {
       div.innerHTML = `
         ${renderPage(spread.left, `left-${i}`)}
-        <div class="photo-grid-container">
-          <div style="text-align:center; padding:8px; font-size:0.9rem; color:var(--brown-medium); font-weight:600; margin-bottom:8px;">
-            ${spread.right.description}
-          </div>
-          <div class="photo-grid">
-            ${spread.right.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
-          </div>
+        <div style="text-align:center; padding:8px; font-size:0.9rem; color:var(--brown-medium); font-weight:600; margin-bottom:8px;">
+          ${spread.right.description}
+        </div>
+        <div class="photo-grid">
+          ${spread.right.photos.map((photo, pi) => renderGridItem(photo, i, pi)).join('')}
         </div>
       `;
     } else {
@@ -636,7 +625,7 @@ function renderBook() {
       `;
     }
     
-    bookContainer.appendChild(div);
+    container.appendChild(div);
   });
 }
 
@@ -647,9 +636,7 @@ function renderPage(page, id) {
   
   let imgHtml;
   if (hasImage && isUnlocked) {
-    imgHtml = `<img src="${hasImage}" />`;
-  } else if (!isUnlocked) {
-    imgHtml = `<div style="width:100%; height:400px; background:var(--beige);"></div>`;
+    imgHtml = `<img src="${hasImage}" alt="${page.title}" />`;
   } else {
     imgHtml = `<div style="width:100%; height:400px; background:var(--beige);"></div>`;
   }
@@ -671,8 +658,7 @@ function renderPage(page, id) {
         <div class="page-info">
           <h3>${page.title}</h3>
           <p>${page.description}</p>
-          <span>${page.date}</span>
-          ${page.tag ? `<span style="background:${page.accent1}22; color:${page.accent1}; padding:3px 10px; border-radius:10px; font-size:0.7rem; margin-left:6px; font-weight:600;">${page.tag}</span>` : ''}
+          <div style="margin-top:8px; font-size:0.8rem; color:var(--brown-light);">${page.date}${page.tag ? ' • ' + page.tag : ''}</div>
         </div>
       ` : ''}
     </div>
@@ -687,9 +673,7 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
   
   let imgHtml;
   if (hasImage && isUnlocked) {
-    imgHtml = `<img src="${hasImage}" />`;
-  } else if (!isUnlocked) {
-    imgHtml = `<div style="width:100%; height:200px; background:var(--beige);"></div>`;
+    imgHtml = `<img src="${hasImage}" alt="${photo.description || 'Memory'}" />`;
   } else {
     imgHtml = `<div style="width:100%; height:200px; background:var(--beige);"></div>`;
   }
@@ -719,8 +703,8 @@ function updateProgress() {
   }, 0);
   const done = unlocked.size;
   const pct = total > 0 ? (done / total) * 100 : 0;
-  progressFill.style.width = pct + '%';
-  progressText.textContent = `Unlocked ${done} of ${total} memories`;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Unlocked ${done} of ${total} memories`;
 }
 
 // Navigation
@@ -732,17 +716,16 @@ function goToPage(idx) {
   currentPage = idx;
   localStorage.setItem('start-currentPage', currentPage);
   
-  // Update month buttons
   document.querySelectorAll('.month-btn').forEach((btn, i) => {
     btn.classList.toggle('active', i === idx);
   });
 }
 
-btnPrev.onclick = () => {
+document.getElementById('btnPrev').onclick = () => {
   if (currentPage > 0) goToPage(currentPage - 1);
 };
 
-btnNext.onclick = () => {
+document.getElementById('btnNext').onclick = () => {
   if (currentPage < spreads.length - 1) goToPage(currentPage + 1);
 };
 
@@ -784,55 +767,56 @@ function showTrivia(id, trivia, title) {
   
   document.getElementById('triviaTitle').textContent = `🔒 ${title}`;
   document.getElementById('triviaQuestion').textContent = trivia.question;
-  triviaResult.textContent = '';
-  triviaResult.className = 'trivia-result';
-  triviaClose.style.display = 'none';
-  triviaTryAgain.style.display = 'none';
+  document.getElementById('triviaResult').textContent = '';
+  document.getElementById('triviaResult').className = 'trivia-result';
+  document.getElementById('triviaClose').style.display = 'none';
+  document.getElementById('triviaTryAgain').style.display = 'none';
   
-  triviaOptions.innerHTML = '';
+  const optsDiv = document.getElementById('triviaOptions');
+  optsDiv.innerHTML = '';
   trivia.options.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'trivia-option';
     btn.textContent = opt;
     btn.onclick = () => checkAnswer(btn, i, trivia.correct, id);
-    triviaOptions.appendChild(btn);
+    optsDiv.appendChild(btn);
   });
   
-  triviaBackdrop.classList.add('show');
+  document.getElementById('triviaBackdrop').classList.add('show');
 }
 
 function checkAnswer(btn, selected, correct, id) {
-  const allBtns = triviaOptions.querySelectorAll('.trivia-option');
+  const allBtns = document.getElementById('triviaOptions').querySelectorAll('.trivia-option');
   allBtns.forEach(b => b.onclick = null);
   
   if (selected === correct) {
     btn.classList.add('correct');
-    triviaResult.textContent = '🎉 Perfect! Memory unlocked!';
-    triviaResult.className = 'trivia-result success';
-    triviaClose.style.display = 'inline-block';
-    triviaTryAgain.style.display = 'none';
+    document.getElementById('triviaResult').textContent = '🎉 Perfect! Memory unlocked!';
+    document.getElementById('triviaResult').className = 'trivia-result success';
+    document.getElementById('triviaClose').style.display = 'inline-block';
+    document.getElementById('triviaTryAgain').style.display = 'none';
     
     unlocked.add(id);
     localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
     fireConfetti();
   } else {
     btn.classList.add('wrong');
-    triviaResult.textContent = 'Try again 😢';
-    triviaResult.className = 'trivia-result fail';
-    triviaClose.style.display = 'none';
-    triviaTryAgain.style.display = 'inline-block';
+    document.getElementById('triviaResult').textContent = 'Try again 😢';
+    document.getElementById('triviaResult').className = 'trivia-result fail';
+    document.getElementById('triviaClose').style.display = 'none';
+    document.getElementById('triviaTryAgain').style.display = 'inline-block';
   }
 }
 
 function closeTrivia() {
-  triviaBackdrop.classList.remove('show');
+  document.getElementById('triviaBackdrop').classList.remove('show');
   renderBook();
   updateProgress();
 }
 
 function tryAgain() {
-  triviaTryAgain.style.display = 'none';
-  triviaBackdrop.classList.remove('show');
+  document.getElementById('triviaTryAgain').style.display = 'none';
+  document.getElementById('triviaBackdrop').classList.remove('show');
   if (currentTriviaId) {
     const parts = currentTriviaId.split('-');
     if (parts[0] === 'grid') {
