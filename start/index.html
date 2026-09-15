@@ -273,8 +273,7 @@ header .subtitle {
 .trivia-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(44,24,16,0.7);
-  backdrop-filter: blur(6px);
+  background: rgba(44,24,16,0.92);
   display: none;
   align-items: center;
   justify-content: center;
@@ -806,8 +805,11 @@ function init() {
   updateDots();
 }
 
+let currentPage = 0;
+
 function renderBook() {
   const container = document.getElementById('bookContainer');
+  const savedPage = currentPage;
   container.innerHTML = '';
   spreads.forEach((spread, i) => {
     if (spread.type === 'photogrid') {
@@ -856,6 +858,8 @@ function renderBook() {
       container.appendChild(div);
     }
   });
+  // Restore the current page after rendering
+  goToPage(savedPage);
 }
 
 function renderPage(page, id) {
@@ -985,6 +989,7 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
         
         // Re-render the book to update the page
         renderBook();
+        goToPage(currentPage);
         updateProgress();
         fireConfetti();
         imgDiv.innerHTML = '<div style="font-size:4rem;">🎉</div>';
@@ -1124,9 +1129,9 @@ function tryAgain() {
     const parts = currentTriviaId.split('-');
     const spreadIdx = parseInt(parts[1]);
     const photoIdx = parseInt(parts[2]);
-    openGridTrivia(currentTriviaId, spreadIdx, photoIdx);
+    setTimeout(() => openGridTrivia(currentTriviaId, spreadIdx, photoIdx), 100);
   } else {
-    openTrivia(currentTriviaId);
+    setTimeout(() => openTrivia(currentTriviaId), 100);
   }
 }
 
@@ -1197,6 +1202,9 @@ function unlockPage(id) {
 
 function closeTrivia() {
   document.getElementById('triviaBackdrop').classList.remove('show');
+  document.getElementById('triviaBackdrop').style.display = 'none';
+  renderBook();
+  goToPage(currentPage);
 }
 
 function clearAllProgress() {
