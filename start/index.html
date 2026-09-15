@@ -813,7 +813,7 @@ function renderBook() {
       div.innerHTML = `
         ${renderPage(spread.left, `left-${i}`)}
         <div class="photo-grid-container">
-          <div class="photo-grid-desc" style="text-align:center; padding:10px; font-size:0.9rem; color:var(--brown-medium); font-weight:600;">
+          <div style="text-align:center; padding:8px; font-size:0.9rem; color:var(--brown-medium); font-weight:600; margin-bottom:8px;">
             ${spread.right.description}
           </div>
           <div class="photo-grid">
@@ -879,14 +879,18 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
   const id = `grid-${spreadIdx}-${photoIdx}`;
   const isUnlocked = unlocked.has(id);
   const hasImage = photo.image;
-  const imgHtml = hasImage 
-    ? `<img src="${hasImage}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`
-    : `<div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>`;
   
-  // Add description and date when unlocked
+  let imgHtml;
+  if (hasImage) {
+    imgHtml = `<img src="${hasImage}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`;
+  } else {
+    imgHtml = `<div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>`;
+  }
+  
+  // Description and date shown below photo when unlocked
   const infoHtml = isUnlocked 
-    ? `<div class="page-info" style="padding:10px;">
-        ${photo.description ? `<p style="font-size:0.85rem; color:#333; font-weight:600;">${photo.description}</p>` : ''}
+    ? `<div style="padding:12px; text-align:center;">
+        ${photo.description ? `<p style="font-size:0.85rem; color:#333; font-weight:600; margin:0 0 4px 0;">${photo.description}</p>` : ''}
         ${photo.date ? `<span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>` : ''}
        </div>`
     : '';
@@ -894,10 +898,10 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
   return `
     <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       ${imgHtml}
-      <div class="lock-overlay">
+      ${isUnlocked ? '' : `<div class="lock-overlay">
         <div class="lock-icon">🔒</div>
         <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
-      </div>
+      </div>`}
       ${infoHtml}
     </div>
   `;
@@ -905,6 +909,8 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
 
 function openGridTrivia(id, spreadIdx, photoIdx) {
   const photo = spreads[spreadIdx].photos[photoIdx];
+  if (!photo || !photo.trivia) return;
+  
   currentTriviaId = id;
   
   // Reset trivia state
@@ -939,16 +945,9 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
         // Unlock the page
         unlocked.add(id);
         localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
-        const pageEl = document.getElementById(`page-${id}`);
-        if (pageEl) {
-          pageEl.classList.remove('locked');
-          pageEl.classList.add('unlocked');
-          const info = pageEl.querySelector('.page-info');
-          if (info && photo.description) {
-            info.innerHTML = `<p style="font-size:0.85rem; color:#333; font-weight:600;">${photo.description}</p>`;
-            if (photo.date) info.innerHTML += `<br><span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>`;
-          }
-        }
+        
+        // Re-render the book to update the page
+        renderBook();
         updateProgress();
         fireConfetti();
         imgDiv.innerHTML = '<div style="font-size:4rem;">🎉</div>';
@@ -965,7 +964,9 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
   });
   
   // Show the modal
-  document.getElementById('triviaBackdrop').classList.add('show');
+  const backdrop = document.getElementById('triviaBackdrop');
+  backdrop.classList.add('show');
+  backdrop.style.display = 'flex';
 }
 
 function renderDots() {
