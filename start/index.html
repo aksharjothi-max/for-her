@@ -900,25 +900,24 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
   
   let imgHtml;
   if (hasImage) {
-    imgHtml = `<img src="${hasImage}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`;
+    imgHtml = `<img src="${hasImage}" style="width:100%; display:block;" />`;
   } else {
-    imgHtml = `<div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>`;
+    imgHtml = `<div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2};"></div>`;
   }
   
-  // Description and date shown below photo when unlocked
+  // Description shown below when unlocked
   const infoHtml = isUnlocked 
     ? `<div style="padding:12px; text-align:center;">
-        ${photo.description ? `<p style="font-size:0.85rem; color:#333; font-weight:600; margin:0 0 4px 0;">${photo.description}</p>` : ''}
-        ${photo.date ? `<span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>` : ''}
+        <p style="font-size:0.85rem; color:#333; font-weight:600; margin:0 0 4px 0;">${photo.description || ''}</p>
        </div>`
     : '';
   
   return `
     <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       ${imgHtml}
-      <div class="lock-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(74,55,40,0.95),rgba(107,78,55,0.92),rgba(139,115,85,0.92));border-radius:16px;z-index:10;">
-        <div style="font-size:36px;margin-bottom:8px;">🔒</div>
-        <button onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})" style="padding:12px 28px;background:var(--caramel);border:none;border-radius:28px;font-family:'Fredoka';font-size:1rem;font-weight:700;color:white;cursor:pointer;">Unlock</button>
+      <div class="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
       </div>
       ${infoHtml}
     </div>
