@@ -399,7 +399,9 @@ function renderPhotos() {
     const hasImage = photo.src && photo.src.length > 0;
     
     let imgHtml;
-    if (hasImage) {
+    if (hasImage && photo.type === 'video') {
+      imgHtml = `<video src="${photo.src}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" controls></video>`;
+    } else if (hasImage) {
       imgHtml = `<img src="${photo.src}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`;
     } else {
       imgHtml = `<div style="width:100%; aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, var(--accent1, #6B4E37), var(--accent2, #C4944A));"><span style="font-size:3rem;">🔒</span></div>`;
