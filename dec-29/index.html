@@ -413,7 +413,7 @@ const grids = [
 const unlocked = new Set();
 
 function init() {
-  const saved = localStorage.getItem('dec29-unlocked');
+  const saved = localStorage.getItem('dec29-unlocked-v2');
   if (saved) JSON.parse(saved).forEach(id => unlocked.add(id));
   renderGrids();
   updateProgress();
@@ -501,7 +501,7 @@ function openTrivia(gridId, gridIdx) {
         document.getElementById('triviaTryAgain').style.display = 'none';
         
         unlocked.add(gridId);
-        localStorage.setItem('dec29-unlocked', JSON.stringify([...unlocked]));
+        localStorage.setItem('dec29-unlocked-v2', JSON.stringify([...unlocked]));
         renderGrids();
         updateProgress();
         fireConfetti();
