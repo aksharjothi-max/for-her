@@ -574,7 +574,25 @@ footer .heart {
   pointer-events: all;
 }
 
-.lock-overlay .lock-icon {
+.grid-item.unlocked .lock-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(74,55,40,0.95), rgba(107,78,55,0.92), rgba(139,115,85,0.92));
+  border-radius: 16px;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.grid-item.locked .lock-icon {
   font-size: 36px;
   margin-bottom: 8px;
 }
@@ -898,10 +916,10 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
   return `
     <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
       ${imgHtml}
-      ${isUnlocked ? '' : `<div class="lock-overlay">
+      <div class="lock-overlay">
         <div class="lock-icon">🔒</div>
         <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
-      </div>`}
+      </div>
       ${infoHtml}
     </div>
   `;
