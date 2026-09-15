@@ -295,17 +295,19 @@ footer p {
 </header>
 
 <main class="container">
-  <div class="locked-section" id="lockedSection">
-    <div class="lock-icon">🔒</div>
-    <h2>This memory is locked</h2>
-    <p>Answer the trivia to unlock this special moment</p>
-    <button class="unlock-btn" onclick="openTrivia()">Unlock Memory</button>
-    
-    <div class="unlocked-content" id="unlockedContent">
-      <h2>December 29, 2025 💕</h2>
-      <p style="margin-top: 16px; line-height: 1.6;">The day we became official. The day everything changed. No more "just friends" — you were mine and I was yours.</p>
-      <!-- Photos will be added here -->
+  <div class="unlocked-content" id="unlockedContent">
+    <h2>December 29, 2025 💕</h2>
+    <p style="margin-top: 16px; line-height: 1.6; text-align:center;">The day we became official. The day everything changed.</p>
+    <div class="photo-grid" id="photoGrid" style="max-width:800px; margin:30px auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; padding:20px;">
+      <!-- Photos will be rendered here -->
     </div>
+  </div>
+  
+  <div class="locked-section" id="lockedSection" style="text-align:center; padding:40px;">
+    <div style="font-size:4rem; margin-bottom:20px;">🔒</div>
+    <h2>6 Photos Locked</h2>
+    <p style="margin-bottom:20px; color:var(--brown-medium);">Answer trivia to unlock each memory</p>
+    <p id="progressText" style="font-size:0.9rem; color:var(--brown-light);">Unlocked: 0/6</p>
   </div>
 </main>
 
@@ -326,24 +328,121 @@ footer p {
 </footer>
 
 <script>
-let currentTriviaId = null;
-let isUnlocked = false;
+// Photos data - add all 6 photos here with base64, description, date, and trivia
+const photos = [
+  {
+    src: "", // data:image/jpeg;base64,...
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  },
+  {
+    src: "",
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  },
+  {
+    src: "",
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  },
+  {
+    src: "",
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  },
+  {
+    src: "",
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  },
+  {
+    src: "",
+    description: "",
+    date: "",
+    question: "",
+    options: ["", "", "", ""],
+    correct: 0
+  }
+];
 
-function openTrivia() {
-  if (isUnlocked) return;
+const unlocked = new Set();
+
+function init() {
+  const saved = localStorage.getItem('dec29-unlocked');
+  if (saved) JSON.parse(saved).forEach(id => unlocked.add(id));
+  renderPhotos();
+  updateProgress();
+}
+
+function renderPhotos() {
+  const grid = document.getElementById('photoGrid');
+  grid.innerHTML = '';
   
-  currentTriviaId = 'dec29';
+  photos.forEach((photo, i) => {
+    const id = `dec29-${i}`;
+    const isUnlocked = unlocked.has(id);
+    const hasImage = photo.src && photo.src.length > 0;
+    
+    let imgHtml;
+    if (hasImage) {
+      imgHtml = `<img src="${photo.src}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`;
+    } else {
+      imgHtml = `<div style="width:100%; aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, var(--accent1, #6B4E37), var(--accent2, #C4944A));"><span style="font-size:3rem;">🔒</span></div>`;
+    }
+    
+    const infoHtml = isUnlocked && photo.description 
+      ? `<div style="padding:12px; text-align:center;">
+          <p style="font-size:0.85rem; color:#333; font-weight:600; margin:0;">${photo.description}</p>
+          ${photo.date ? `<span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>` : ''}
+         </div>` 
+      : '';
+    
+    grid.innerHTML += `
+      <div class="photo-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}" style="background:var(--white); border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(44,24,16,0.08);">
+        ${imgHtml}
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <button class="unlock-btn" onclick="openTrivia('${id}', ${i})">Unlock</button>
+        </div>
+        ${infoHtml}
+      </div>
+    `;
+  });
+}
+
+function updateProgress() {
+  document.getElementById('progressText').textContent = `Unlocked: ${unlocked.size}/6`;
+  if (unlocked.size === photos.length) {
+    document.getElementById('lockedSection').style.display = 'none';
+  }
+}
+
+function openTrivia(id, photoIdx) {
+  const photo = photos[photoIdx];
+  if (!photo || !photo.question) return;
   
   document.getElementById('triviaTitle').textContent = '🔒 Memory Lock';
-  document.getElementById('triviaQuestion').textContent = 'What day did we start dating?';
+  document.getElementById('triviaQuestion').textContent = photo.question;
   
   const optsDiv = document.getElementById('triviaOptions');
   optsDiv.innerHTML = '';
   
-  const options = ['December 25', 'December 27', 'December 29', 'December 31'];
-  const correct = 2; // December 29
-  
-  options.forEach((opt, i) => {
+  photo.options.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'trivia-option';
     btn.textContent = opt;
@@ -351,13 +450,18 @@ function openTrivia() {
       const allBtns = optsDiv.querySelectorAll('.trivia-option');
       allBtns.forEach(b => b.onclick = null);
       
-      if (i === correct) {
+      if (i === photo.correct) {
         btn.classList.add('correct');
-        document.getElementById('triviaResult').textContent = '🎉 Perfect! You unlocked the memory!';
+        document.getElementById('triviaResult').textContent = '🎉 Perfect! Memory unlocked!';
         document.getElementById('triviaResult').className = 'trivia-result success';
         document.getElementById('triviaClose').style.display = 'inline-block';
         document.getElementById('triviaTryAgain').style.display = 'none';
-        isUnlocked = true;
+        
+        unlocked.add(id);
+        localStorage.setItem('dec29-unlocked', JSON.stringify([...unlocked]));
+        renderPhotos();
+        updateProgress();
+        fireConfetti();
       } else {
         btn.classList.add('wrong');
         document.getElementById('triviaResult').textContent = 'Try again 😢';
@@ -377,14 +481,29 @@ function openTrivia() {
 
 function tryAgain() {
   document.getElementById('triviaTryAgain').style.display = 'none';
-  openTrivia();
 }
 
 function closeTrivia() {
   document.getElementById('triviaBackdrop').classList.remove('show');
-  document.getElementById('lockedSection').style.display = 'none';
-  document.getElementById('unlockedContent').classList.add('show');
 }
+
+function fireConfetti() {
+  const colors = ['#C4944A', '#D4A853', '#C97B63', '#8B7355', '#6B4E37'];
+  for (let i = 0; i < 45; i++) {
+    const c = document.createElement('div');
+    c.style.cssText = `position:fixed; left:${Math.random()*100}vw; top:-20px; background:${colors[Math.floor(Math.random()*colors.length)]}; border-radius:${Math.random()>0.5?'50%':'3px'}; width:${Math.random()*10+6}px; height:${Math.random()*10+6}px; z-index:200; pointer-events:none; animation:confettiFall ${Math.random()*2+1.5}s linear forwards`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3500);
+  }
+}
+
+// Add confetti animation
+const style = document.createElement('style');
+style.textContent = '@keyframes confettiFall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(style);
+
+// Initialize
+init();
 </script>
 
 </body>
