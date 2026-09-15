@@ -875,14 +875,27 @@ function renderPage(page, id) {
 function renderGridItem(photo, spreadIdx, photoIdx) {
   const id = `grid-${spreadIdx}-${photoIdx}`;
   const isUnlocked = unlocked.has(id);
+  const hasImage = photo.image;
+  const imgHtml = hasImage 
+    ? `<img src="${hasImage}" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;" />`
+    : `<div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>`;
+  
+  // Add description and date when unlocked
+  const infoHtml = isUnlocked 
+    ? `<div class="page-info" style="padding:10px;">
+        ${photo.description ? `<p style="font-size:0.85rem; color:#333; font-weight:600;">${photo.description}</p>` : ''}
+        ${photo.date ? `<span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>` : ''}
+       </div>`
+    : '';
+  
   return `
     <div class="grid-item ${isUnlocked ? 'unlocked' : 'locked'}" id="page-${id}">
-      <div class="placeholder-img" style="--accent1:${photo.accent1}; --accent2:${photo.accent2}; aspect-ratio:1;"></div>
+      ${imgHtml}
       <div class="lock-overlay">
         <div class="lock-icon">🔒</div>
         <button class="unlock-btn" onclick="openGridTrivia('${id}', ${spreadIdx}, ${photoIdx})">Unlock</button>
       </div>
-      ${isUnlocked ? `<div class="page-info" style="padding:10px;"><p style="font-size:0.85rem; color:#666;">Memory unlocked!</p></div>` : ''}
+      ${infoHtml}
     </div>
   `;
 }
@@ -890,10 +903,19 @@ function renderGridItem(photo, spreadIdx, photoIdx) {
 function openGridTrivia(id, spreadIdx, photoIdx) {
   const photo = spreads[spreadIdx].photos[photoIdx];
   currentTriviaId = id;
+  
+  // Reset trivia state
   document.getElementById('triviaTitle').textContent = '🔒 Memory Lock';
   document.getElementById('triviaQuestion').textContent = photo.trivia.question;
+  document.getElementById('triviaResult').textContent = '';
+  document.getElementById('triviaResult').className = 'trivia-result';
+  document.getElementById('triviaImage').style.display = 'none';
+  document.getElementById('triviaClose').style.display = 'none';
+  document.getElementById('triviaTryAgain').style.display = 'none';
+  
   const optsDiv = document.getElementById('triviaOptions');
   optsDiv.innerHTML = '';
+  
   photo.trivia.options.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'trivia-option';
@@ -903,12 +925,15 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
       allBtns.forEach(b => b.onclick = null);
       const imgDiv = document.getElementById('triviaImage');
       imgDiv.style.display = 'block';
+      
       if (i === photo.trivia.correct) {
         btn.classList.add('correct');
         document.getElementById('triviaResult').textContent = '🎉 Perfect! Memory unlocked!';
         document.getElementById('triviaResult').className = 'trivia-result success';
         document.getElementById('triviaClose').style.display = 'inline-block';
         document.getElementById('triviaTryAgain').style.display = 'none';
+        
+        // Unlock the page
         unlocked.add(id);
         localStorage.setItem('start-unlocked', JSON.stringify([...unlocked]));
         const pageEl = document.getElementById(`page-${id}`);
@@ -916,7 +941,10 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
           pageEl.classList.remove('locked');
           pageEl.classList.add('unlocked');
           const info = pageEl.querySelector('.page-info');
-          if (info) info.innerHTML = '<p style="font-size:0.85rem; color:#666;">Memory unlocked!</p>';
+          if (info && photo.description) {
+            info.innerHTML = `<p style="font-size:0.85rem; color:#333; font-weight:600;">${photo.description}</p>`;
+            if (photo.date) info.innerHTML += `<br><span style="font-size:0.7rem; color:var(--brown-light);">${photo.date}</span>`;
+          }
         }
         updateProgress();
         fireConfetti();
@@ -932,11 +960,8 @@ function openGridTrivia(id, spreadIdx, photoIdx) {
     };
     optsDiv.appendChild(btn);
   });
-  document.getElementById('triviaResult').textContent = '';
-  document.getElementById('triviaResult').className = 'trivia-result';
-  document.getElementById('triviaImage').style.display = 'none';
-  document.getElementById('triviaClose').style.display = 'none';
-  document.getElementById('triviaTryAgain').style.display = 'none';
+  
+  // Show the modal
   document.getElementById('triviaBackdrop').classList.add('show');
 }
 
